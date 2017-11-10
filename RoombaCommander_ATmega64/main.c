@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
+#include <avr/interrupt.h>
+
 
 #ifdef GCC_MEGA_AVR
 	/* EEPROM routines used only with the WinAVR compiler. */
@@ -29,14 +31,18 @@ tasks just use the idle priority. */
 static void vRedLED( void *pvParameters );
 static void vGreenLED( void *pvParameters );
 static void vUART0TransmitService( void *pvParameters );
+static void vUART0ReceiveService( void *pvParameters );
 void vApplicationIdleHook( void );
-void sendMessage( unsigned char *message, QueueHandle_t queue);
+static void sendMessage( unsigned char *message, QueueHandle_t queue);
 
 unsigned char message[] = "Hello! ";
+unsigned char message2[] = "Bye! ";
 QueueHandle_t bufferSendUART0;
 QueueHandle_t bufferReceiveUART0;
 
 int main( void ) {
+
+	
 
 	bufferSendUART0 = xQueueCreate(16, sizeof(unsigned char));
 	bufferReceiveUART0 = xQueueCreate(16, sizeof(unsigned char));
@@ -44,12 +50,16 @@ int main( void ) {
 	DDRB |= (1 << PB0);
 	DDRB |= (1 << PB1);
 
+
 	USART_Init();
+	UCSR0B |= (1 << RXCIE0);
+	sei();
 
 	/* Create the tasks defined within this file. */
 	xTaskCreate( vRedLED, "RedLED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL );
 	//xTaskCreate( vGreenLED, "GreenLED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vUART0TransmitService, "UART0Tx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
+	xTaskCreate( vUART0ReceiveService, "UART0Rx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
 
 	vTaskStartScheduler();
 
@@ -64,7 +74,7 @@ static void vRedLED( void *pvParameters ) {
 
 	for( ;; ) {
 		PORTB ^= (1 << PB0);
-		sendMessage(message, bufferSendUART0);
+		//sendMessage(message, bufferSendUART0);
 		PORTB ^= (1 << PB0);
 		vTaskDelay( 200 );
 	}
@@ -78,7 +88,6 @@ static void vGreenLED( void *pvParameters ) {
 	for( ;; ) {
 		//PORTB ^= (1 << PB1);
 		vTaskDelay( 50 );
-		//USART0_SendString(message);
 	}
 }
 
@@ -95,16 +104,35 @@ static void vUART0TransmitService( void *pvParameters ) {
 	}
 }
 
-void sendMessage( unsigned char *message, QueueHandle_t queue) {
+static void vUART0ReceiveService( void *pvParameters ) {
+	
+	/* The parameters are not used. */
+	( void ) pvParameters;
+	
+	for( ;; ) {
+		/* Waits for bufferReceiveUART0 to fill, then pops first byte of data and
+		   copies it to UART0 data register UDR0 effectively transmitting it. 
+		   Test code - writes back to terminal. */ 
+		xQueueReceive( bufferReceiveUART0, &UDR0, portMAX_DELAY );
+		while(!( UCSR0A & (1<<UDRE0)));		// Wait for transmit to finish
+	}
+}
+
+static void sendMessage( unsigned char *message, QueueHandle_t queue) {
 	/* Receives a message and pushes it on UART send queue character by character.
-	   Limited to 255 characters for efficiency (counter i is single byte). */
+	   Limited to 255 characters for efficiency (counter i takes one byte). 
+	   Message must be null terminated. */
 	for(uint8_t i = 0; message[i] != '\0'; ++i) {
 		xQueueSendToBack( queue, message+i, pdMS_TO_TICKS(50));
 	}
 }
 
 void vApplicationIdleHook( void ) {
-	PORTB ^= (1 << PB1);
+	//PORTB ^= (1 << PB1);
+}
+
+ISR(USART0_RX_vect) {
+	xQueueSendToBackFromISR( bufferReceiveUART0, &UDR0, NULL);
 }
 
 /*-----------------------------------------------------------*/

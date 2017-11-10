@@ -23,18 +23,19 @@ Discarded input sections
  .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
  .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
  .data          0x00000000        0x0 FreeRTOS/Source/croutine.o
- .text          0x00000000      0x6b8 FreeRTOS/Source/event_groups.o
+ .text          0x00000000      0x34c FreeRTOS/Source/event_groups.o
  .data          0x00000000        0x0 FreeRTOS/Source/event_groups.o
  .bss           0x00000000        0x0 FreeRTOS/Source/event_groups.o
- .debug_info    0x00000000      0x647 FreeRTOS/Source/event_groups.o
- .debug_abbrev  0x00000000      0x137 FreeRTOS/Source/event_groups.o
- .debug_loc     0x00000000      0x2e5 FreeRTOS/Source/event_groups.o
+ .debug_info    0x00000000      0x8e9 FreeRTOS/Source/event_groups.o
+ .debug_abbrev  0x00000000      0x203 FreeRTOS/Source/event_groups.o
+ .debug_loc     0x00000000      0xb40 FreeRTOS/Source/event_groups.o
  .debug_aranges
                 0x00000000       0x20 FreeRTOS/Source/event_groups.o
- .debug_line    0x00000000      0x469 FreeRTOS/Source/event_groups.o
- .debug_str     0x00000000      0x4d9 FreeRTOS/Source/event_groups.o
+ .debug_ranges  0x00000000       0x18 FreeRTOS/Source/event_groups.o
+ .debug_line    0x00000000      0x393 FreeRTOS/Source/event_groups.o
+ .debug_str     0x00000000      0x585 FreeRTOS/Source/event_groups.o
  .comment       0x00000000       0x31 FreeRTOS/Source/event_groups.o
- .debug_frame   0x00000000      0x160 FreeRTOS/Source/event_groups.o
+ .debug_frame   0x00000000      0x158 FreeRTOS/Source/event_groups.o
  .data          0x00000000        0x0 FreeRTOS/Source/list.o
  .bss           0x00000000        0x0 FreeRTOS/Source/list.o
  .data          0x00000000        0x0 FreeRTOS/Source/portable/GCC/ATMega64/port.o
@@ -53,21 +54,23 @@ Discarded input sections
  .debug_line    0x00000000       0x1a FreeRTOS/Source/timers.o
  .debug_str     0x00000000      0x169 FreeRTOS/Source/timers.o
  .comment       0x00000000       0x31 FreeRTOS/Source/timers.o
+ .data          0x00000000        0xe main.o
  .bss           0x00000000        0x0 main.o
  .data          0x00000000        0x0 ATmega64UART.o
  .bss           0x00000000        0x0 ATmega64UART.o
- .text          0x00000000      0x338 serial.o
+ COMMON         0x00000000        0x1 ATmega64UART.o
+ .text          0x00000000      0x1f8 serial.o
  .data          0x00000000        0x0 serial.o
  .bss           0x00000000        0x4 serial.o
- .debug_info    0x00000000      0x2af serial.o
- .debug_abbrev  0x00000000       0xcd serial.o
- .debug_loc     0x00000000      0x31b serial.o
+ .debug_info    0x00000000      0x3e3 serial.o
+ .debug_abbrev  0x00000000      0x170 serial.o
+ .debug_loc     0x00000000      0x457 serial.o
  .debug_aranges
                 0x00000000       0x20 serial.o
- .debug_line    0x00000000      0x21c serial.o
- .debug_str     0x00000000      0x2a7 serial.o
+ .debug_line    0x00000000      0x1e6 serial.o
+ .debug_str     0x00000000      0x31b serial.o
  .comment       0x00000000       0x31 serial.o
- .debug_frame   0x00000000      0x164 serial.o
+ .debug_frame   0x00000000      0x150 serial.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
@@ -270,7 +273,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x3c52
+.text           0x00000000     0x2272
  *(.vectors)
  .vectors       0x00000000       0x8c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
                 0x00000000                __vector_default
@@ -362,98 +365,97 @@ END GROUP
                 0x000000c6                __vector_10
                 0x000000c6                __vector_16
                 0x000000c6                __vector_20
- .text          0x000000ca      0x5fa FreeRTOS/Source/croutine.o
+ .text          0x000000ca      0x434 FreeRTOS/Source/croutine.o
                 0x000000ca                xCoRoutineCreate
-                0x00000202                vCoRoutineAddToDelayedList
-                0x000004d4                vCoRoutineSchedule
-                0x00000652                xCoRoutineRemoveFromEventList
- .text          0x000006c4      0x2cc FreeRTOS/Source/list.o
-                0x000006c4                vListInitialise
-                0x00000730                vListInitialiseItem
-                0x00000754                vListInsertEnd
-                0x000007f2                vListInsert
-                0x000008e2                uxListRemove
- .text          0x00000990      0x608 FreeRTOS/Source/portable/GCC/ATMega64/port.o
-                0x00000990                pxPortInitialiseStack
-                0x00000ce2                xPortStartScheduler
-                0x00000d4c                vPortEndScheduler
-                0x00000d5c                vPortYield
-                0x00000e10                vPortYieldFromTick
-                0x00000f90                __vector_12
- .text          0x00000f98       0xfe FreeRTOS/Source/portable/MemMang/heap_1.o
-                0x00000f98                pvPortMalloc
-                0x00001042                vPortFree
-                0x0000105c                vPortInitialiseBlocks
-                0x00001074                xPortGetFreeHeapSize
- .text          0x00001096     0x1008 FreeRTOS/Source/queue.o
-                0x00001096                xQueueGenericReset
-                0x000011be                xQueueGenericCreate
-                0x000012d6                xQueueGenericSend
-                0x00001438                xQueueGenericSendFromISR
-                0x000014f6                xQueueGiveFromISR
-                0x000015aa                xQueueGenericReceive
-                0x00001752                xQueueReceiveFromISR
-                0x00001810                xQueuePeekFromISR
-                0x00001888                uxQueueMessagesWaiting
-                0x000018ba                uxQueueSpacesAvailable
-                0x00001908                uxQueueMessagesWaitingFromISR
-                0x00001930                vQueueDelete
-                0x00001c70                xQueueIsQueueEmptyFromISR
-                0x00001ce6                xQueueIsQueueFullFromISR
-                0x00001d20                xQueueCRSend
-                0x00001de2                xQueueCRReceive
-                0x00001f14                xQueueCRSendFromISR
-                0x00001f96                xQueueCRReceiveFromISR
- .text          0x0000209e     0x1888 FreeRTOS/Source/tasks.o
-                0x0000209e                xTaskCreate
-                0x00002418                vTaskDelete
-                0x000024ea                vTaskDelayUntil
-                0x000025de                vTaskDelay
-                0x00002624                vTaskStartScheduler
-                0x0000268e                vTaskEndScheduler
-                0x000026a8                vTaskSuspendAll
-                0x000026c2                xTaskResumeAll
-                0x000027f0                xTaskGetTickCount
-                0x0000281e                xTaskGetTickCountFromISR
-                0x00002848                uxTaskGetNumberOfTasks
-                0x0000285a                pcTaskGetName
-                0x00002898                xTaskIncrementTick
-                0x00002a72                vTaskSwitchContext
-                0x00002b5a                vTaskPlaceOnEventList
-                0x00002ba0                vTaskPlaceOnUnorderedEventList
-                0x00002c04                xTaskRemoveFromEventList
-                0x00002cde                xTaskRemoveFromUnorderedEventList
-                0x00002db4                vTaskSetTimeOutState
-                0x00002dec                xTaskCheckForTimeOut
-                0x00002ebc                vTaskMissedYield
-                0x00003082                uxTaskResetEventItemValue
-                0x000030d6                ulTaskNotifyTake
-                0x000031d0                xTaskNotifyWait
-                0x0000331c                xTaskGenericNotify
-                0x000034de                xTaskGenericNotifyFromISR
-                0x000036d6                vTaskNotifyGiveFromISR
-                0x000037f2                xTaskNotifyStateClear
- .text          0x00003926      0x1d2 main.o
-                0x00003926                main
-                0x00003a6e                sendMessage
-                0x00003ad4                vApplicationIdleHook
- .text          0x00003af8      0x144 ATmega64UART.o
-                0x00003af8                __vector_18
-                0x00003b3a                USART_Init
-                0x00003b66                USART_SendByte
-                0x00003b88                USART0_SendChar
-                0x00003baa                USART0_SendString
-                0x00003c18                USART_ReceiveByte
-                0x00003c3c                . = ALIGN (0x2)
+                0x000001ba                vCoRoutineAddToDelayedList
+                0x00000240                vCoRoutineSchedule
+                0x000004b4                xCoRoutineRemoveFromEventList
+ .text          0x000004fe      0x114 FreeRTOS/Source/list.o
+                0x000004fe                vListInitialise
+                0x0000051a                vListInitialiseItem
+                0x00000522                vListInsertEnd
+                0x00000564                vListInsert
+                0x000005c6                uxListRemove
+ .text          0x00000612      0x2b6 FreeRTOS/Source/portable/GCC/ATMega64/port.o
+                0x00000612                pxPortInitialiseStack
+                0x000006ea                xPortStartScheduler
+                0x00000756                vPortEndScheduler
+                0x00000758                vPortYield
+                0x0000080a                vPortYieldFromTick
+                0x000008c2                __vector_12
+ .text          0x000008c8       0x88 FreeRTOS/Source/portable/MemMang/heap_1.o
+                0x000008c8                pvPortMalloc
+                0x00000932                vPortFree
+                0x00000934                vPortInitialiseBlocks
+                0x0000093e                xPortGetFreeHeapSize
+ .text          0x00000950      0x85a FreeRTOS/Source/queue.o
+                0x00000ab0                xQueueGenericReset
+                0x00000b2a                xQueueGenericCreate
+                0x00000b84                xQueueGenericSend
+                0x00000cc6                xQueueGenericSendFromISR
+                0x00000d3a                xQueueGiveFromISR
+                0x00000d8c                xQueueGenericReceive
+                0x00000ef6                xQueueReceiveFromISR
+                0x00000f64                xQueuePeekFromISR
+                0x00000f92                uxQueueMessagesWaiting
+                0x00000fa2                uxQueueSpacesAvailable
+                0x00000fb6                uxQueueMessagesWaitingFromISR
+                0x00000fbc                vQueueDelete
+                0x00000fc2                xQueueIsQueueEmptyFromISR
+                0x00000fce                xQueueIsQueueFullFromISR
+                0x00000fdc                xQueueCRSend
+                0x0000104e                xQueueCRReceive
+                0x000010e0                xQueueCRSendFromISR
+                0x00001128                xQueueCRReceiveFromISR
+ .text          0x000011aa      0xf3e FreeRTOS/Source/tasks.o
+                0x00001270                xTaskCreate
+                0x00001480                vTaskDelete
+                0x0000152a                vTaskStartScheduler
+                0x0000157e                vTaskEndScheduler
+                0x0000158a                vTaskSuspendAll
+                0x00001596                xTaskGetTickCount
+                0x000015aa                xTaskGetTickCountFromISR
+                0x000015b4                uxTaskGetNumberOfTasks
+                0x000015ba                pcTaskGetName
+                0x000015ca                xTaskIncrementTick
+                0x00001740                xTaskResumeAll
+                0x0000183e                vTaskDelayUntil
+                0x000018ba                vTaskDelay
+                0x00001960                vTaskSwitchContext
+                0x00001a2c                vTaskPlaceOnEventList
+                0x00001a50                vTaskPlaceOnUnorderedEventList
+                0x00001a82                xTaskRemoveFromEventList
+                0x00001b12                xTaskRemoveFromUnorderedEventList
+                0x00001b86                vTaskSetTimeOutState
+                0x00001b9c                xTaskCheckForTimeOut
+                0x00001c00                vTaskMissedYield
+                0x00001c08                uxTaskResetEventItemValue
+                0x00001c36                ulTaskNotifyTake
+                0x00001ce4                xTaskNotifyWait
+                0x00001dec                xTaskGenericNotify
+                0x00001ee8                xTaskGenericNotifyFromISR
+                0x0000200a                vTaskNotifyGiveFromISR
+                0x000020c0                xTaskNotifyStateClear
+ .text          0x000020e8      0x136 main.o
+                0x00002138                main
+                0x000021c2                vApplicationIdleHook
+                0x000021c4                __vector_18
+ .text          0x0000221e       0x3e ATmega64UART.o
+                0x0000221e                USART_Init
+                0x0000222c                USART_SendByte
+                0x00002230                USART0_SendChar
+                0x00002234                USART0_SendString
+                0x00002254                USART_ReceiveByte
+                0x0000225c                . = ALIGN (0x2)
  *(.text.*)
  .text.avr-libc
-                0x00003c3c       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(memcpy.o)
-                0x00003c3c                memcpy
-                0x00003c4e                . = ALIGN (0x2)
+                0x0000225c       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(memcpy.o)
+                0x0000225c                memcpy
+                0x0000226e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00003c4e        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x00003c4e                _exit
-                0x00003c4e                exit
+ .fini9         0x0000226e        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x0000226e                _exit
+                0x0000226e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -472,26 +474,26 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00003c4e        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x0000226e        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00003c52                _etext = .
+                0x00002272                _etext = .
 
-.data           0x00800100       0x1c load address 0x00003c52
+.data           0x00800100       0x1c load address 0x00002272
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
- .data          0x00800100        0x8 main.o
-                0x00800100                message
  *(.data*)
  *(.rodata)
- .rodata        0x00800108        0x5 FreeRTOS/Source/tasks.o
- .rodata        0x0080010d        0xf main.o
  *(.rodata*)
+ .rodata.str1.1
+                0x00800100        0x5 FreeRTOS/Source/tasks.o
+ .rodata.str1.1
+                0x00800105       0x17 main.o
  *(.gnu.linkonce.d*)
                 0x0080011c                . = ALIGN (0x2)
                 0x0080011c                _edata = .
                 0x0080011c                PROVIDE (__data_end, .)
 
-.bss            0x0080011c      0xca0
+.bss            0x0080011c      0xc9f
                 0x0080011c                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x0080011c       0x3a FreeRTOS/Source/croutine.o
@@ -504,17 +506,15 @@ END GROUP
  COMMON         0x00800db7        0x4 main.o
                 0x00800db7                bufferReceiveUART0
                 0x00800db9                bufferSendUART0
- COMMON         0x00800dbb        0x1 ATmega64UART.o
-                0x00800dbb                value
-                0x00800dbc                PROVIDE (__bss_end, .)
-                0x00003c52                __data_load_start = LOADADDR (.data)
-                0x00003c6e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800dbb                PROVIDE (__bss_end, .)
+                0x00002272                __data_load_start = LOADADDR (.data)
+                0x0000228e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800dbc        0x0
+.noinit         0x00800dbb        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800dbc                _end = .
+                0x00800dbb                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -608,83 +608,83 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x326f
+.debug_info     0x00000000     0x472f
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x780 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
- .debug_info    0x00000780      0x4d4 FreeRTOS/Source/croutine.o
- .debug_info    0x00000c54      0x2ac FreeRTOS/Source/list.o
- .debug_info    0x00000f00      0x1e9 FreeRTOS/Source/portable/GCC/ATMega64/port.o
- .debug_info    0x000010e9      0x16c FreeRTOS/Source/portable/MemMang/heap_1.o
- .debug_info    0x00001255      0xc93 FreeRTOS/Source/queue.o
- .debug_info    0x00001ee8     0x1031 FreeRTOS/Source/tasks.o
- .debug_info    0x00002f19      0x1f1 main.o
- .debug_info    0x0000310a      0x165 ATmega64UART.o
+ .debug_info    0x00000780      0x779 FreeRTOS/Source/croutine.o
+ .debug_info    0x00000ef9      0x2c9 FreeRTOS/Source/list.o
+ .debug_info    0x000011c2      0x25f FreeRTOS/Source/portable/GCC/ATMega64/port.o
+ .debug_info    0x00001421      0x1a0 FreeRTOS/Source/portable/MemMang/heap_1.o
+ .debug_info    0x000015c1     0x13a0 FreeRTOS/Source/queue.o
+ .debug_info    0x00002961     0x1871 FreeRTOS/Source/tasks.o
+ .debug_info    0x000041d2      0x40b main.o
+ .debug_info    0x000045dd      0x152 ATmega64UART.o
 
-.debug_abbrev   0x00000000     0x10b4
+.debug_abbrev   0x00000000     0x143b
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x718 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
- .debug_abbrev  0x00000718      0x180 FreeRTOS/Source/croutine.o
- .debug_abbrev  0x00000898       0xbe FreeRTOS/Source/list.o
- .debug_abbrev  0x00000956      0x102 FreeRTOS/Source/portable/GCC/ATMega64/port.o
- .debug_abbrev  0x00000a58       0xee FreeRTOS/Source/portable/MemMang/heap_1.o
- .debug_abbrev  0x00000b46      0x18b FreeRTOS/Source/queue.o
- .debug_abbrev  0x00000cd1      0x216 FreeRTOS/Source/tasks.o
- .debug_abbrev  0x00000ee7       0xf5 main.o
- .debug_abbrev  0x00000fdc       0xd8 ATmega64UART.o
+ .debug_abbrev  0x00000718      0x229 FreeRTOS/Source/croutine.o
+ .debug_abbrev  0x00000941       0xf6 FreeRTOS/Source/list.o
+ .debug_abbrev  0x00000a37      0x153 FreeRTOS/Source/portable/GCC/ATMega64/port.o
+ .debug_abbrev  0x00000b8a      0x11a FreeRTOS/Source/portable/MemMang/heap_1.o
+ .debug_abbrev  0x00000ca4      0x25f FreeRTOS/Source/queue.o
+ .debug_abbrev  0x00000f03      0x325 FreeRTOS/Source/tasks.o
+ .debug_abbrev  0x00001228      0x13b main.o
+ .debug_abbrev  0x00001363       0xd8 ATmega64UART.o
 
-.debug_line     0x00000000     0x27dc
+.debug_line     0x00000000     0x22cf
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x169 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
- .debug_line    0x00000169      0x3cb FreeRTOS/Source/croutine.o
- .debug_line    0x00000534      0x20d FreeRTOS/Source/list.o
- .debug_line    0x00000741      0x3d4 FreeRTOS/Source/portable/GCC/ATMega64/port.o
- .debug_line    0x00000b15      0x1ad FreeRTOS/Source/portable/MemMang/heap_1.o
- .debug_line    0x00000cc2      0xa29 FreeRTOS/Source/queue.o
- .debug_line    0x000016eb      0xd9d FreeRTOS/Source/tasks.o
- .debug_line    0x00002488      0x1ef main.o
- .debug_line    0x00002677      0x165 ATmega64UART.o
+ .debug_line    0x00000169      0x33d FreeRTOS/Source/croutine.o
+ .debug_line    0x000004a6      0x1f1 FreeRTOS/Source/list.o
+ .debug_line    0x00000697      0x290 FreeRTOS/Source/portable/GCC/ATMega64/port.o
+ .debug_line    0x00000927      0x1b8 FreeRTOS/Source/portable/MemMang/heap_1.o
+ .debug_line    0x00000adf      0x93f FreeRTOS/Source/queue.o
+ .debug_line    0x0000141e      0xbca FreeRTOS/Source/tasks.o
+ .debug_line    0x00001fe8      0x1d4 main.o
+ .debug_line    0x000021bc      0x113 ATmega64UART.o
 
-.debug_frame    0x00000000      0xd38
+.debug_frame    0x00000000      0xa00
  *(.debug_frame)
- .debug_frame   0x00000000       0xf4 FreeRTOS/Source/croutine.o
- .debug_frame   0x000000f4       0xb4 FreeRTOS/Source/list.o
- .debug_frame   0x000001a8       0xc4 FreeRTOS/Source/portable/GCC/ATMega64/port.o
- .debug_frame   0x0000026c       0x94 FreeRTOS/Source/portable/MemMang/heap_1.o
- .debug_frame   0x00000300      0x32c FreeRTOS/Source/queue.o
- .debug_frame   0x0000062c      0x53c FreeRTOS/Source/tasks.o
- .debug_frame   0x00000b68       0xe0 main.o
- .debug_frame   0x00000c48       0xf0 ATmega64UART.o
+ .debug_frame   0x00000000       0xc0 FreeRTOS/Source/croutine.o
+ .debug_frame   0x000000c0       0x88 FreeRTOS/Source/list.o
+ .debug_frame   0x00000148       0x74 FreeRTOS/Source/portable/GCC/ATMega64/port.o
+ .debug_frame   0x000001bc       0x60 FreeRTOS/Source/portable/MemMang/heap_1.o
+ .debug_frame   0x0000021c      0x2d4 FreeRTOS/Source/queue.o
+ .debug_frame   0x000004f0      0x3e0 FreeRTOS/Source/tasks.o
+ .debug_frame   0x000008d0       0xcc main.o
+ .debug_frame   0x0000099c       0x64 ATmega64UART.o
 
-.debug_str      0x00000000     0x15f9
+.debug_str      0x00000000     0x1602
  *(.debug_str)
  .debug_str     0x00000000      0x27e C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
- .debug_str     0x0000027e      0x464 FreeRTOS/Source/croutine.o
-                                0x4ca (size before relaxing)
- .debug_str     0x000006e2       0xae FreeRTOS/Source/list.o
+ .debug_str     0x0000027e      0x4cf FreeRTOS/Source/croutine.o
+                                0x535 (size before relaxing)
+ .debug_str     0x0000074d       0x62 FreeRTOS/Source/list.o
                                 0x2aa (size before relaxing)
- .debug_str     0x00000790      0x128 FreeRTOS/Source/portable/GCC/ATMega64/port.o
-                                0x294 (size before relaxing)
- .debug_str     0x000008b8       0xaf FreeRTOS/Source/portable/MemMang/heap_1.o
-                                0x20d (size before relaxing)
- .debug_str     0x00000967      0x418 FreeRTOS/Source/queue.o
-                                0x669 (size before relaxing)
- .debug_str     0x00000d7f      0x78b FreeRTOS/Source/tasks.o
-                                0xac4 (size before relaxing)
- .debug_str     0x0000150a       0x76 main.o
-                                0x226 (size before relaxing)
- .debug_str     0x00001580       0x79 ATmega64UART.o
-                                0x1c9 (size before relaxing)
+ .debug_str     0x000007af      0x14e FreeRTOS/Source/portable/GCC/ATMega64/port.o
+                                0x2ba (size before relaxing)
+ .debug_str     0x000008fd       0xc1 FreeRTOS/Source/portable/MemMang/heap_1.o
+                                0x22c (size before relaxing)
+ .debug_str     0x000009be      0x489 FreeRTOS/Source/queue.o
+                                0x764 (size before relaxing)
+ .debug_str     0x00000e47      0x6ca FreeRTOS/Source/tasks.o
+                                0xb6e (size before relaxing)
+ .debug_str     0x00001511       0x8f main.o
+                                0x2ac (size before relaxing)
+ .debug_str     0x000015a0       0x62 ATmega64UART.o
+                                0x1bd (size before relaxing)
 
-.debug_loc      0x00000000     0x1b64
+.debug_loc      0x00000000     0x3f61
  *(.debug_loc)
- .debug_loc     0x00000000      0x1f7 FreeRTOS/Source/croutine.o
- .debug_loc     0x000001f7      0x167 FreeRTOS/Source/list.o
- .debug_loc     0x0000035e      0x105 FreeRTOS/Source/portable/GCC/ATMega64/port.o
- .debug_loc     0x00000463      0x106 FreeRTOS/Source/portable/MemMang/heap_1.o
- .debug_loc     0x00000569      0x6e7 FreeRTOS/Source/queue.o
- .debug_loc     0x00000c50      0xb80 FreeRTOS/Source/tasks.o
- .debug_loc     0x000017d0      0x1bd main.o
- .debug_loc     0x0000198d      0x1d7 ATmega64UART.o
+ .debug_loc     0x00000000      0x3eb FreeRTOS/Source/croutine.o
+ .debug_loc     0x000003eb      0x145 FreeRTOS/Source/list.o
+ .debug_loc     0x00000530      0x2a0 FreeRTOS/Source/portable/GCC/ATMega64/port.o
+ .debug_loc     0x000007d0       0xf1 FreeRTOS/Source/portable/MemMang/heap_1.o
+ .debug_loc     0x000008c1     0x1ba9 FreeRTOS/Source/queue.o
+ .debug_loc     0x0000246a     0x19ab FreeRTOS/Source/tasks.o
+ .debug_loc     0x00003e15      0x12d main.o
+ .debug_loc     0x00003f42       0x1f ATmega64UART.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -704,8 +704,10 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges
+.debug_ranges   0x00000000       0xd8
  *(.debug_ranges)
+ .debug_ranges  0x00000000       0x60 FreeRTOS/Source/queue.o
+ .debug_ranges  0x00000060       0x78 FreeRTOS/Source/tasks.o
 
 .debug_macro
  *(.debug_macro)
