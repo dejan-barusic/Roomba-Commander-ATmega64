@@ -9,13 +9,14 @@
 /* Scheduler include files. */
 #include "FreeRTOS.h"
 #include "task.h"
+#include "queue.h"
 #include "ATmega64UART.h"
 
 
 /* Priority definitions for most of the tasks in the demo application.  Some
 tasks just use the idle priority. */
-#define mainRED_LED_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
-#define mainGREEN_LED_TASK_PRIORITY			( tskIDLE_PRIORITY + 2 )
+#define mainLED_TASK_PRIORITY				( tskIDLE_PRIORITY + 1 )
+#define mainUART_PRIORITY					( tskIDLE_PRIORITY + 2 )
 #define mainQUEUE_POLL_PRIORITY				( tskIDLE_PRIORITY + 2 )
 #define mainCHECK_TASK_PRIORITY				( tskIDLE_PRIORITY + 3 )
 
@@ -27,24 +28,28 @@ tasks just use the idle priority. */
 
 static void vRedLED( void *pvParameters );
 static void vGreenLED( void *pvParameters );
-//static void vPutChar( void *pvParameters );
-
-//xComPortHandle serialPort;
+static void vUART0TransmitService( void *pvParameters );
+void vApplicationIdleHook( void );
+void sendMessage( unsigned char *message, QueueHandle_t queue);
 
 unsigned char message[] = "Hello! ";
+QueueHandle_t bufferSendUART0;
+QueueHandle_t bufferReceiveUART0;
 
 int main( void ) {
+
+	bufferSendUART0 = xQueueCreate(16, sizeof(unsigned char));
+	bufferReceiveUART0 = xQueueCreate(16, sizeof(unsigned char));
 
 	DDRB |= (1 << PB0);
 	DDRB |= (1 << PB1);
 
-	//serialPort = xSerialPortInitMinimal(115200, 8);
 	USART_Init();
 
 	/* Create the tasks defined within this file. */
-	xTaskCreate( vRedLED, "Red LED", configMINIMAL_STACK_SIZE, NULL, mainRED_LED_TASK_PRIORITY, NULL );
-	xTaskCreate( vGreenLED, "Green LED", configMINIMAL_STACK_SIZE, NULL, mainGREEN_LED_TASK_PRIORITY, NULL );
-	//xTaskCreate( vPutChar, "Put Char", configMINIMAL_STACK_SIZE, NULL, 3, NULL );
+	xTaskCreate( vRedLED, "RedLED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL );
+	//xTaskCreate( vGreenLED, "GreenLED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL );
+	xTaskCreate( vUART0TransmitService, "UART0Tx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
 
 	vTaskStartScheduler();
 
@@ -58,10 +63,10 @@ static void vRedLED( void *pvParameters ) {
 	( void ) pvParameters;
 
 	for( ;; ) {
-		PORTB ^= (0 << PB0);
-		/* pdMS_TO_TICKS is not working as expected. 
-		   Use formula: (time_ms*configTICK_RATE_HZ)/1000 */
-		vTaskDelay( 50 );
+		PORTB ^= (1 << PB0);
+		sendMessage(message, bufferSendUART0);
+		PORTB ^= (1 << PB0);
+		vTaskDelay( 200 );
 	}
 }
 
@@ -71,21 +76,36 @@ static void vGreenLED( void *pvParameters ) {
 	( void ) pvParameters;
 
 	for( ;; ) {
-		PORTB ^= (1 << PB1);
+		//PORTB ^= (1 << PB1);
 		vTaskDelay( 50 );
-		USART0_SendString(message);
+		//USART0_SendString(message);
 	}
 }
 
-//static void vPutChar( void *pvParameters ) {
-//
-	///* The parameters are not used. */
-	//( void ) pvParameters;
-//
-	//for( ;; ) {
-		////xSerialPutChar(serialPort, 'X', pdMS_TO_TICKS(100));
-		//vTaskDelay( pdMS_TO_TICKS(1000) );
-	//}
-//}
+static void vUART0TransmitService( void *pvParameters ) {
+	
+	/* The parameters are not used. */
+	( void ) pvParameters;
+	
+	for( ;; ) {
+		/* Waits for bufferSendUART0 to fill, then pops first byte of data and
+		   copies it to UART0 data register UDR0 effectively transmitting it. */ 
+		xQueueReceive( bufferSendUART0, &UDR0, portMAX_DELAY );
+		while(!( UCSR0A & (1<<UDRE0)));		// Wait for transmit to finish
+	}
+}
+
+void sendMessage( unsigned char *message, QueueHandle_t queue) {
+	/* Receives a message and pushes it on UART send queue character by character.
+	   Limited to 255 characters for efficiency (counter i is single byte). */
+	for(uint8_t i = 0; message[i] != '\0'; ++i) {
+		xQueueSendToBack( queue, message+i, pdMS_TO_TICKS(50));
+	}
+}
+
+void vApplicationIdleHook( void ) {
+	PORTB ^= (1 << PB1);
+}
+
 /*-----------------------------------------------------------*/
 
