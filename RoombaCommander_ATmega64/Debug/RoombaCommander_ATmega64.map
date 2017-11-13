@@ -14,9 +14,16 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 Allocating common symbols
 Common symbol       size              file
 
-bufferReceiveUART0  0x2               main.o
-bufferSendUART0     0x2               main.o
-value               0x1               ATmega64UART.o
+msg                 0x4               main.o
+bufferReceiveUART1Bluetooth
+                    0x2               main.o
+message2            0x20              main.o
+bufferReceiveUART0Serial
+                    0x2               main.o
+bufferSendUART0Serial
+                    0x2               main.o
+bufferSendUART1Bluetooth
+                    0x2               main.o
 
 Discarded input sections
 
@@ -54,11 +61,11 @@ Discarded input sections
  .debug_line    0x00000000       0x1a FreeRTOS/Source/timers.o
  .debug_str     0x00000000      0x169 FreeRTOS/Source/timers.o
  .comment       0x00000000       0x31 FreeRTOS/Source/timers.o
- .data          0x00000000        0xe main.o
  .bss           0x00000000        0x0 main.o
  .data          0x00000000        0x0 ATmega64UART.o
  .bss           0x00000000        0x0 ATmega64UART.o
- COMMON         0x00000000        0x1 ATmega64UART.o
+ .data          0x00000000        0x0 message.o
+ .bss           0x00000000        0x0 message.o
  .text          0x00000000      0x1f8 serial.o
  .data          0x00000000        0x0 serial.o
  .bss           0x00000000        0x4 serial.o
@@ -165,6 +172,7 @@ LOAD FreeRTOS/Source/tasks.o
 LOAD FreeRTOS/Source/timers.o
 LOAD main.o
 LOAD ATmega64UART.o
+LOAD message.o
 LOAD serial.o
 START GROUP
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a
@@ -273,7 +281,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x2272
+.text           0x00000000     0x2460
  *(.vectors)
  .vectors       0x00000000       0x8c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
                 0x00000000                __vector_default
@@ -343,7 +351,6 @@ END GROUP
                 0x000000c6                __vector_31
                 0x000000c6                __vector_3
                 0x000000c6                __vector_23
-                0x000000c6                __vector_30
                 0x000000c6                __vector_25
                 0x000000c6                __vector_11
                 0x000000c6                __vector_13
@@ -436,26 +443,30 @@ END GROUP
                 0x00001ee8                xTaskGenericNotifyFromISR
                 0x0000200a                vTaskNotifyGiveFromISR
                 0x000020c0                xTaskNotifyStateClear
- .text          0x000020e8      0x136 main.o
-                0x00002138                main
-                0x000021c2                vApplicationIdleHook
-                0x000021c4                __vector_18
- .text          0x0000221e       0x3e ATmega64UART.o
-                0x0000221e                USART_Init
-                0x0000222c                USART_SendByte
-                0x00002230                USART0_SendChar
-                0x00002234                USART0_SendString
-                0x00002254                USART_ReceiveByte
-                0x0000225c                . = ALIGN (0x2)
+ .text          0x000020e8      0x28c main.o
+                0x000021ba                main
+                0x000022b6                vApplicationIdleHook
+                0x000022c0                __vector_18
+                0x0000231a                __vector_30
+ .text          0x00002374       0x4c ATmega64UART.o
+                0x00002374                USART_Init
+                0x00002390                USART_SendByte
+                0x00002394                USART0_SendChar
+                0x00002398                USART0_SendString
+                0x000023b8                USART_ReceiveByte
+ .text          0x000023c0       0x8a message.o
+                0x000023c0                makeMessage
+                0x000023cc                getMessage
+                0x0000244a                . = ALIGN (0x2)
  *(.text.*)
  .text.avr-libc
-                0x0000225c       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(memcpy.o)
-                0x0000225c                memcpy
-                0x0000226e                . = ALIGN (0x2)
+                0x0000244a       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(memcpy.o)
+                0x0000244a                memcpy
+                0x0000245c                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000226e        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x0000226e                _exit
-                0x0000226e                exit
+ .fini9         0x0000245c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x0000245c                _exit
+                0x0000245c                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -474,47 +485,53 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000226e        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x0000245c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00002272                _etext = .
+                0x00002460                _etext = .
 
-.data           0x00800100       0x1c load address 0x00002272
+.data           0x00800100       0x34 load address 0x00002460
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
+ .data          0x00800100        0x8 main.o
+                0x00800100                message1
  *(.data*)
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800100        0x5 FreeRTOS/Source/tasks.o
+                0x00800108        0x5 FreeRTOS/Source/tasks.o
  .rodata.str1.1
-                0x00800105       0x17 main.o
+                0x0080010d       0x27 main.o
  *(.gnu.linkonce.d*)
-                0x0080011c                . = ALIGN (0x2)
-                0x0080011c                _edata = .
-                0x0080011c                PROVIDE (__data_end, .)
+                0x00800134                . = ALIGN (0x2)
+                0x00800134                _edata = .
+                0x00800134                PROVIDE (__data_end, .)
 
-.bss            0x0080011c      0xc9f
-                0x0080011c                PROVIDE (__bss_start, .)
+.bss            0x00800134      0xcc7
+                0x00800134                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x0080011c       0x3a FreeRTOS/Source/croutine.o
-                0x0080011c                pxCurrentCoRoutine
- .bss           0x00800156      0xc04 FreeRTOS/Source/portable/MemMang/heap_1.o
- .bss           0x00800d5a       0x5d FreeRTOS/Source/tasks.o
-                0x00800d5a                pxCurrentTCB
+ .bss           0x00800134       0x3a FreeRTOS/Source/croutine.o
+                0x00800134                pxCurrentCoRoutine
+ .bss           0x0080016e      0xc04 FreeRTOS/Source/portable/MemMang/heap_1.o
+ .bss           0x00800d72       0x5d FreeRTOS/Source/tasks.o
+                0x00800d72                pxCurrentTCB
  *(.bss*)
  *(COMMON)
- COMMON         0x00800db7        0x4 main.o
-                0x00800db7                bufferReceiveUART0
-                0x00800db9                bufferSendUART0
-                0x00800dbb                PROVIDE (__bss_end, .)
-                0x00002272                __data_load_start = LOADADDR (.data)
-                0x0000228e                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800dcf       0x2c main.o
+                0x00800dcf                msg
+                0x00800dd3                bufferReceiveUART1Bluetooth
+                0x00800dd5                message2
+                0x00800df5                bufferReceiveUART0Serial
+                0x00800df7                bufferSendUART0Serial
+                0x00800df9                bufferSendUART1Bluetooth
+                0x00800dfb                PROVIDE (__bss_end, .)
+                0x00002460                __data_load_start = LOADADDR (.data)
+                0x00002494                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800dbb        0x0
+.noinit         0x00800dfb        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800dbb                _end = .
+                0x00800dfb                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -565,6 +582,7 @@ END GROUP
  .comment       0x00000030       0x31 FreeRTOS/Source/tasks.o
  .comment       0x00000030       0x31 main.o
  .comment       0x00000030       0x31 ATmega64UART.o
+ .comment       0x00000030       0x31 message.o
 
 .note.gnu.avr.deviceinfo
                 0x00000000       0x3c
@@ -586,7 +604,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x100
+.debug_aranges  0x00000000      0x120
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x20 FreeRTOS/Source/croutine.o
@@ -604,11 +622,13 @@ END GROUP
                 0x000000c0       0x20 main.o
  .debug_aranges
                 0x000000e0       0x20 ATmega64UART.o
+ .debug_aranges
+                0x00000100       0x20 message.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x472f
+.debug_info     0x00000000     0x4bc7
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x780 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
  .debug_info    0x00000780      0x779 FreeRTOS/Source/croutine.o
@@ -617,10 +637,11 @@ END GROUP
  .debug_info    0x00001421      0x1a0 FreeRTOS/Source/portable/MemMang/heap_1.o
  .debug_info    0x000015c1     0x13a0 FreeRTOS/Source/queue.o
  .debug_info    0x00002961     0x1871 FreeRTOS/Source/tasks.o
- .debug_info    0x000041d2      0x40b main.o
- .debug_info    0x000045dd      0x152 ATmega64UART.o
+ .debug_info    0x000041d2      0x754 main.o
+ .debug_info    0x00004926      0x13b ATmega64UART.o
+ .debug_info    0x00004a61      0x166 message.o
 
-.debug_abbrev   0x00000000     0x143b
+.debug_abbrev   0x00000000     0x15ad
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x718 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
  .debug_abbrev  0x00000718      0x229 FreeRTOS/Source/croutine.o
@@ -629,10 +650,11 @@ END GROUP
  .debug_abbrev  0x00000b8a      0x11a FreeRTOS/Source/portable/MemMang/heap_1.o
  .debug_abbrev  0x00000ca4      0x25f FreeRTOS/Source/queue.o
  .debug_abbrev  0x00000f03      0x325 FreeRTOS/Source/tasks.o
- .debug_abbrev  0x00001228      0x13b main.o
- .debug_abbrev  0x00001363       0xd8 ATmega64UART.o
+ .debug_abbrev  0x00001228      0x1e3 main.o
+ .debug_abbrev  0x0000140b       0xc0 ATmega64UART.o
+ .debug_abbrev  0x000014cb       0xe2 message.o
 
-.debug_line     0x00000000     0x22cf
+.debug_line     0x00000000     0x24d4
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x169 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
  .debug_line    0x00000169      0x33d FreeRTOS/Source/croutine.o
@@ -641,10 +663,11 @@ END GROUP
  .debug_line    0x00000927      0x1b8 FreeRTOS/Source/portable/MemMang/heap_1.o
  .debug_line    0x00000adf      0x93f FreeRTOS/Source/queue.o
  .debug_line    0x0000141e      0xbca FreeRTOS/Source/tasks.o
- .debug_line    0x00001fe8      0x1d4 main.o
- .debug_line    0x000021bc      0x113 ATmega64UART.o
+ .debug_line    0x00001fe8      0x290 main.o
+ .debug_line    0x00002278      0x125 ATmega64UART.o
+ .debug_line    0x0000239d      0x137 message.o
 
-.debug_frame    0x00000000      0xa00
+.debug_frame    0x00000000      0xab8
  *(.debug_frame)
  .debug_frame   0x00000000       0xc0 FreeRTOS/Source/croutine.o
  .debug_frame   0x000000c0       0x88 FreeRTOS/Source/list.o
@@ -652,10 +675,11 @@ END GROUP
  .debug_frame   0x000001bc       0x60 FreeRTOS/Source/portable/MemMang/heap_1.o
  .debug_frame   0x0000021c      0x2d4 FreeRTOS/Source/queue.o
  .debug_frame   0x000004f0      0x3e0 FreeRTOS/Source/tasks.o
- .debug_frame   0x000008d0       0xcc main.o
- .debug_frame   0x0000099c       0x64 ATmega64UART.o
+ .debug_frame   0x000008d0      0x144 main.o
+ .debug_frame   0x00000a14       0x64 ATmega64UART.o
+ .debug_frame   0x00000a78       0x40 message.o
 
-.debug_str      0x00000000     0x1602
+.debug_str      0x00000000     0x16c5
  *(.debug_str)
  .debug_str     0x00000000      0x27e C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.132/gcc/dev/atmega64/avr5/crtatmega64.o
  .debug_str     0x0000027e      0x4cf FreeRTOS/Source/croutine.o
@@ -670,12 +694,14 @@ END GROUP
                                 0x764 (size before relaxing)
  .debug_str     0x00000e47      0x6ca FreeRTOS/Source/tasks.o
                                 0xb6e (size before relaxing)
- .debug_str     0x00001511       0x8f main.o
-                                0x2ac (size before relaxing)
- .debug_str     0x000015a0       0x62 ATmega64UART.o
-                                0x1bd (size before relaxing)
+ .debug_str     0x00001511      0x147 main.o
+                                0x383 (size before relaxing)
+ .debug_str     0x00001658       0x57 ATmega64UART.o
+                                0x1b7 (size before relaxing)
+ .debug_str     0x000016af       0x16 message.o
+                                0x197 (size before relaxing)
 
-.debug_loc      0x00000000     0x3f61
+.debug_loc      0x00000000     0x41b6
  *(.debug_loc)
  .debug_loc     0x00000000      0x3eb FreeRTOS/Source/croutine.o
  .debug_loc     0x000003eb      0x145 FreeRTOS/Source/list.o
@@ -683,8 +709,9 @@ END GROUP
  .debug_loc     0x000007d0       0xf1 FreeRTOS/Source/portable/MemMang/heap_1.o
  .debug_loc     0x000008c1     0x1ba9 FreeRTOS/Source/queue.o
  .debug_loc     0x0000246a     0x19ab FreeRTOS/Source/tasks.o
- .debug_loc     0x00003e15      0x12d main.o
- .debug_loc     0x00003f42       0x1f ATmega64UART.o
+ .debug_loc     0x00003e15      0x27b main.o
+ .debug_loc     0x00004090       0x1f ATmega64UART.o
+ .debug_loc     0x000040af      0x107 message.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -704,10 +731,12 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xd8
+.debug_ranges   0x00000000      0x108
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x60 FreeRTOS/Source/queue.o
  .debug_ranges  0x00000060       0x78 FreeRTOS/Source/tasks.o
+ .debug_ranges  0x000000d8       0x18 main.o
+ .debug_ranges  0x000000f0       0x18 message.o
 
 .debug_macro
  *(.debug_macro)

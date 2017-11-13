@@ -58,6 +58,7 @@ C_SRCS +=  \
 ../FreeRTOS/Source/timers.c \
 ../main.c \
 ../ATmega64UART.c \
+../message.c \
 ../serial.c
 
 
@@ -78,6 +79,7 @@ FreeRTOS/Source/tasks.o \
 FreeRTOS/Source/timers.o \
 main.o \
 ATmega64UART.o \
+message.o \
 serial.o
 
 OBJS_AS_ARGS +=  \
@@ -91,6 +93,7 @@ FreeRTOS/Source/tasks.o \
 FreeRTOS/Source/timers.o \
 main.o \
 ATmega64UART.o \
+message.o \
 serial.o
 
 C_DEPS +=  \
@@ -104,6 +107,7 @@ FreeRTOS/Source/tasks.d \
 FreeRTOS/Source/timers.d \
 main.d \
 ATmega64UART.d \
+message.d \
 serial.d
 
 C_DEPS_AS_ARGS +=  \
@@ -117,6 +121,7 @@ FreeRTOS/Source/tasks.d \
 FreeRTOS/Source/timers.d \
 main.d \
 ATmega64UART.d \
+message.d \
 serial.d
 
 OUTPUT_FILE_PATH +=RoombaCommander_ATmega64.elf
@@ -133,6 +138,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
