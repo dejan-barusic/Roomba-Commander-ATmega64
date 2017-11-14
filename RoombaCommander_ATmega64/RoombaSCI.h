@@ -66,7 +66,8 @@
 
 	Serial sequence: [128]
 */
-#define SCI_START 128UC
+#define SCI_START_OPCODE      (uint8_t) 128
+#define SCI_START_DATA_BYTES  (uint8_t) 0
 
 
 /*	Baud
@@ -96,7 +97,8 @@
 	10			57600
 	11			115200
 */
-#define SCI_BAUD 129
+#define SCI_BAUD_OPCODE      (uint8_t) 129
+#define SCI_BAUD_DATA_BYTES  (uint8_t) 1
 
 
 /*	Control
@@ -108,7 +110,8 @@
 
 	Serial sequence: [130]
 */
-#define SCI_CONTROL 130
+#define SCI_CONTROL_OPCODE      (uint8_t) 130
+#define SCI_CONTROL_DATA_BYTES  (uint8_t) 0
 
 
 /*	Safe
@@ -120,7 +123,8 @@
 
 	Serial sequence: [131]
 */
-#define SCI_SAFE 131
+#define SCI_SAFE_OPCODE      (uint8_t) 131
+#define SCI_SAFE_DATA_BYTES  (uint8_t) 0
 
 
 /*	Full
@@ -132,7 +136,8 @@
 
 	Serial sequence: [132]
 */
-#define SCI_FULL 132
+#define SCI_FULL_OPCODE      (uint8_t) 132
+#define SCI_FULL_DATA_BYTES  (uint8_t) 0
 
 
 /*	Power
@@ -145,7 +150,8 @@
 
 	Serial sequence: [133]
 */
-#define SCI_POWER 133
+#define SCI_POWER_OPCODE      (uint8_t) 133
+#define SCI_POWER_DATA_BYTES  (uint8_t) 0
 
 
 /*	Spot
@@ -157,7 +163,8 @@
 
 	Serial sequence: [134]
 */
-#define SCI_SPOT 134
+#define SCI_SPOT_OPCODE      (uint8_t) 134
+#define SCI_SPOT_DATA_BYTES  (uint8_t) 0
 
 
 /*	Clean
@@ -169,7 +176,8 @@
 
 	Serial sequence: [135]
 */
-#define SCI_CLEAN 135
+#define SCI_CLEAN_OPCODE      (uint8_t) 135
+#define SCI_CLEAN_DATA_BYTES  (uint8_t) 0
 
 
 /*	Max
@@ -181,7 +189,8 @@
 
 	Serial sequence: [136]
 */
-#define SCI_MAX 136
+#define SCI_MAX_OPCODE      (uint8_t) 136
+#define SCI_MAX_DATA_BYTES  (uint8_t) 0
 
 
 /*	Drive
@@ -213,7 +222,8 @@
 				Velocity = -200 = hex FF38 = [hex FF] [hex 38] = [255] [56]
 				Radius = 500 = hex 01F4 = [hex 01] [hex F4] = [1] [244]
 */
-#define SCI_DRIVE 137
+#define SCI_DRIVE_OPCODE      (uint8_t) 137
+#define SCI_DRIVE_DATA_BYTES  (uint8_t) 4
 
 
 /*	Motors
@@ -232,7 +242,8 @@
 
 	Example:	To turn on only the vacuum motor, send the serial byte sequence [138] [2].
 */
-#define SCI_MOTORS 138
+#define SCI_MOTORS_OPCODE      (uint8_t) 138
+#define SCI_MOTORS_DATA_BYTES  (uint8_t) 1
 
 
 /*	Leds
@@ -266,7 +277,8 @@
 	Example:	To turn on the dirt detect and spot LEDs, make the status LED red, and to light the power LED green at half intensity,
 				send the serial byte sequence [139] [25] [0] [128]
 */
-#define SCI_LEDS 139
+#define SCI_LEDS_OPCODE      (uint8_t) 139
+#define SCI_LEDS_DATA_BYTES  (uint8_t) 3
 
 
 /*	Song
@@ -396,7 +408,8 @@
 	126		F#		11839.8
 	127		G		12543.9
 */
-#define SCI_SONG 140
+#define SCI_SONG_OPCODE      (uint8_t) 140
+#define SCI_SONG_DATA_BYTES  (uint8_t) 34
 
 
 /*	Play 
@@ -413,7 +426,8 @@
 	Specifies the number of the song to be played. This must match the song number of a song previously specified by a Song
 	command.
 */
-#define SCI_PLAY 141
+#define SCI_PLAY_OPCODE      (uint8_t) 141
+#define SCI_PLAY_DATA_BYTES  (uint8_t) 1
 
 
 /*	Sensors 
@@ -670,11 +684,12 @@
 		The estimated charge capacity of Roomba’s battery. When the Charge value reaches the Capacity value, the battery is fully
 		charged.
 */
-#define SCI_SENSORS				(uint8_t)142
-#define SCI_SENSORS_PACKET0		(uint8_t)0
-#define SCI_SENSORS_PACKET1		(uint8_t)1
-#define SCI_SENSORS_PACKET2		(uint8_t)2
-#define SCI_SENSORS_PACKET3		(uint8_t)3
+#define SCI_SENSORS_OPCODE		(uint8_t) 142
+#define SCI_SENSORS_DATA_BYTES  (uint8_t) 1
+#define SCI_SENSORS_PACKET0		(uint8_t) 0
+#define SCI_SENSORS_PACKET1		(uint8_t) 1
+#define SCI_SENSORS_PACKET2		(uint8_t) 2
+#define SCI_SENSORS_PACKET3		(uint8_t) 3
 
 
 /*	Force-Seeking-Dock 
@@ -684,12 +699,13 @@
 	Turns on force-seeking-dock mode, which causes the robot to immediately attempt to dock during its cleaning cycle if it
 	encounters the docking beams from the Home Base. (Note, however, that if the robot was not active in a clean, spot or max
 	cycle it will not attempt to execute the docking.) Normally the robot attempts to dock only if the cleaning cycle has completed
-	or the battery is nearing depletion. This command can be sent anytime, but the mode will be cancelled if the robot turns off,
+	or the battery is nearing depletion. This command can be sent anytime, but the mode will be canceled if the robot turns off,
 	begins charging, or is commanded into SCI safe or full modes.
 
 	Serial sequence: [143]
 */
-#define SCI_FORCE_SEEKING_DOCK 143
+#define SCI_FORCE_SEEKING_DOCK_OPCODE      (uint8_t) 143
+#define SCI_FORCE_SEEKING_DOCK_DATA_BYTES  (uint8_t) 0
 
 
 #endif /* ROOMBASCI_H_ */

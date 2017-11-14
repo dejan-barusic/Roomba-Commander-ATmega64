@@ -35,7 +35,6 @@ static void vRedLED( void *pvParameters );
 static void vGreenLED( void *pvParameters );
 static void vUART0TransmitService( void *pvParameters );
 static void vUART1TransmitService( void *pvParameters );
-static void vUART0ReceiveService( void *pvParameters );
 static void vUART1ReceiveService( void *pvParameters );
 static void vCyclicalTask( void *pvParameters );
 void vApplicationIdleHook( void );
@@ -71,13 +70,12 @@ int main( void ) {
 	sei();
 
 	/* Create the tasks defined within this file. */
-	xTaskCreate( vRedLED, "RedLED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL );
+	//xTaskCreate( vRedLED, "RedLED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL );
 	//xTaskCreate( vGreenLED, "GreenLED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vUART0TransmitService, "UART0Tx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
 	xTaskCreate( vUART1TransmitService, "UART1Tx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
-	//xTaskCreate( vUART0ReceiveService, "UART0Rx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
 	xTaskCreate( vUART1ReceiveService, "UART1Rx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
-	xTaskCreate( vCyclicalTask, "Cyclical", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
+	//xTaskCreate( vCyclicalTask, "Cyclical", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
 
 	vTaskStartScheduler();
 
@@ -138,31 +136,56 @@ static void vUART1TransmitService( void *pvParameters ) {
 	}
 }
 
-static void vUART0ReceiveService( void *pvParameters ) {
-	
-	/* The parameters are not used. */
-	( void ) pvParameters;
-	
-	for( ;; ) {
-		/* Waits for bufferReceiveUART0 to fill, then pops first byte of data and
-		   copies it to UART0 data register UDR0 effectively transmitting it. 
-		   Test code - writes back to terminal. */ 
-		xQueueReceive( bufferReceiveUART0Serial, &UDR0, portMAX_DELAY );
-		while(!( UCSR0A & (1<<UDRE0)));		// Wait for transmit to finish
-	}
-}
-
 static void vUART1ReceiveService( void *pvParameters ) {
 	
+	/* General purpose variables. */
+	uint8_t opcode, data, numberOfDataBytes;
+
 	/* The parameters are not used. */
 	( void ) pvParameters;
 	
 	for( ;; ) {
-		/* Waits for bufferReceiveUART1 to fill, then pops first byte of data and
-		   copies it to UART1 data register UDR1 effectively transmitting it. 
-		   Test code - writes back to terminal. */ 
-		xQueueReceive( bufferReceiveUART1Bluetooth, &UDR1, portMAX_DELAY );
-		while(!( UCSR1A & (1<<UDRE1)));		// Wait for transmit to finish
+		xQueueReceive( bufferReceiveUART1Bluetooth, &opcode, portMAX_DELAY );
+
+		if( opcode >= SCI_START_OPCODE && opcode <= SCI_FORCE_SEEKING_DOCK_OPCODE ) {
+			
+			switch( opcode ) {
+				case SCI_START_OPCODE:
+				case SCI_CONTROL_OPCODE:
+				case SCI_SAFE_OPCODE:
+				case SCI_FULL_OPCODE:
+				case SCI_POWER_OPCODE:
+				case SCI_SPOT_OPCODE:
+				case SCI_CLEAN_OPCODE:
+				case SCI_MAX_OPCODE:
+				case SCI_FORCE_SEEKING_DOCK_OPCODE:
+					numberOfDataBytes = 0;
+					break;
+				case SCI_BAUD_OPCODE:
+				case SCI_MOTORS_OPCODE:
+				case SCI_PLAY_OPCODE:
+				case SCI_SENSORS_OPCODE:
+					numberOfDataBytes = 1;
+					break;
+				case SCI_LEDS_OPCODE:
+					numberOfDataBytes = 3;
+					break;
+				case SCI_SONG_OPCODE: // Special case - variable length
+					numberOfDataBytes = 3;
+					break;
+				case SCI_DRIVE_OPCODE:
+					numberOfDataBytes = 4;
+					break;
+				default:
+				break;
+			}
+			sendCharacter(opcode, bufferSendUART0Serial);
+			while( numberOfDataBytes ) {
+				xQueueReceive( bufferReceiveUART1Bluetooth, &data, 0 );
+				sendCharacter(data, bufferSendUART0Serial);
+				--numberOfDataBytes;
+			}
+		}
 	}
 }
 
@@ -187,7 +210,7 @@ static void vCyclicalTask( void *pvParameters ) {
 		flushQueue(bufferReceiveUART0Serial);
 
 		/* Send request to Roomba for sensor data (2 bytes). */
-		buffer = SCI_SENSORS;
+		buffer = SCI_SENSORS_OPCODE;
 		xQueueSendToBack( bufferSendUART0Serial, &buffer, pdMS_TO_TICKS(10) );
 		buffer = SCI_SENSORS_PACKET0;
 		xQueueSendToBack( bufferSendUART0Serial, &buffer, pdMS_TO_TICKS(10) );
@@ -228,6 +251,7 @@ static void sendMessage( unsigned char *message, QueueHandle_t queue) {
 		xQueueSendToBack( queue, message+i, pdMS_TO_TICKS(10));
 	}
 }
+
 
 static void sendCharacter( unsigned char character, QueueHandle_t queue) {
 	/* Receives a character and pushes it on UART send queue. */
