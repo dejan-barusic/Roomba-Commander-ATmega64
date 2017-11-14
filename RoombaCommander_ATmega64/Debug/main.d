@@ -22,7 +22,7 @@ main.d main.o: .././main.c \
  ../FreeRTOS/Source/include/mpu_wrappers.h \
  ../FreeRTOS/Source/include/task.h ../FreeRTOS/Source/include/list.h \
  ../FreeRTOS/Source/include/queue.h .././ATmega64UART.h .././message.h \
- .././msgHeaders.h
+ .././msgHeaders.h .././RoombaSCI.h
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h:
 
@@ -79,3 +79,5 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././message.h:
 
 .././msgHeaders.h:
+
+.././RoombaSCI.h:

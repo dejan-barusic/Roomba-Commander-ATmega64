@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #ifndef ROOMBASCI_H_
 #define ROOMBASCI_H_
 
@@ -64,7 +66,7 @@
 
 	Serial sequence: [128]
 */
-#define SCI_START 128
+#define SCI_START 128UC
 
 
 /*	Baud
@@ -668,7 +670,11 @@
 		The estimated charge capacity of Roomba’s battery. When the Charge value reaches the Capacity value, the battery is fully
 		charged.
 */
-#define SCI_SENSORS 142
+#define SCI_SENSORS				(uint8_t)142
+#define SCI_SENSORS_PACKET0		(uint8_t)0
+#define SCI_SENSORS_PACKET1		(uint8_t)1
+#define SCI_SENSORS_PACKET2		(uint8_t)2
+#define SCI_SENSORS_PACKET3		(uint8_t)3
 
 
 /*	Force-Seeking-Dock 
