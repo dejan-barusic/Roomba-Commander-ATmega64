@@ -684,12 +684,16 @@
 		The estimated charge capacity of Roomba’s battery. When the Charge value reaches the Capacity value, the battery is fully
 		charged.
 */
-#define SCI_SENSORS_OPCODE		(uint8_t) 142
-#define SCI_SENSORS_DATA_BYTES  (uint8_t) 1
-#define SCI_SENSORS_PACKET0		(uint8_t) 0
-#define SCI_SENSORS_PACKET1		(uint8_t) 1
-#define SCI_SENSORS_PACKET2		(uint8_t) 2
-#define SCI_SENSORS_PACKET3		(uint8_t) 3
+#define SCI_SENSORS_OPCODE			(uint8_t) 142
+#define SCI_SENSORS_DATA_BYTES		(uint8_t) 1
+#define SCI_SENSORS_PACKET0			(uint8_t) 0
+#define SCI_SENSORS_PACKET1			(uint8_t) 1
+#define SCI_SENSORS_PACKET2			(uint8_t) 2
+#define SCI_SENSORS_PACKET3			(uint8_t) 3
+#define SCI_SENSORS_PACKET0_BYTES	(uint8_t) 26
+#define SCI_SENSORS_PACKET1_BYTES	(uint8_t) 10
+#define SCI_SENSORS_PACKET2_BYTES	(uint8_t) 6
+#define SCI_SENSORS_PACKET3_BYTES	(uint8_t) 10
 
 
 /*	Force-Seeking-Dock 

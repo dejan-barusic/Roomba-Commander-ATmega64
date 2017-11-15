@@ -1,7 +1,10 @@
-#include <stdlib.h>
-#include <string.h>
-#include <avr/interrupt.h>
 
+/*************************************************************/
+/*                        INCLUDES                           */
+/*************************************************************/
+
+#include <stdlib.h>
+#include <avr/interrupt.h>
 
 #ifdef GCC_MEGA_AVR
 	/* EEPROM routines used only with the WinAVR compiler. */
@@ -11,106 +14,178 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
-#include "ATmega64UART.h"
-#include "message.h"
-#include "msgHeaders.h"
 #include "RoombaSCI.h"
 
 
-/* Priority definitions for most of the tasks in the demo application.  Some
-tasks just use the idle priority. */
-#define mainLED_TASK_PRIORITY				( tskIDLE_PRIORITY + 1 )
-#define mainUART_PRIORITY					( tskIDLE_PRIORITY + 2 )
-#define mainQUEUE_POLL_PRIORITY				( tskIDLE_PRIORITY + 2 )
-#define mainCHECK_TASK_PRIORITY				( tskIDLE_PRIORITY + 3 )
 
-/* Baud rate used by the serial port tasks. */
-//#define mainCOM_BAUD_RATE			( ( unsigned long ) 9600 )
-#define CPU_Z 11059200UL
+/*************************************************************/
+/*                       DEFINITIONS                         */
+/*************************************************************/
+
+/* CPU frequency. */
+#define F_CPU 11059200UL
+
+/* Baud rate. */
+#define BAUD_UART1 9600UL
+#define BAUD_UART0 115200UL
+#define UBRR_UART0 (uint16_t)(F_CPU/(16*BAUD_UART0)-1)
+#define UBRR_UART1 (uint16_t)(F_CPU/(16*BAUD_UART1)-1)
+
+/* Tasks priority. */
+#define mainLOW_PRIORITY			( tskIDLE_PRIORITY + 1 )
+#define mainNORMAL_PRIORITY			( tskIDLE_PRIORITY + 2 )
+#define mainHIGH_PRIORITY			( tskIDLE_PRIORITY + 2 )
+
+/* Errors. */
+#define ERROR_OK					(uint8_t) 0		/* No error */
+#define ERROR_BT_NORESPONSE			(uint8_t) 1		/* Bluetooth no response error */
+#define ERROR_ROOMBA_NORESPONSE		(uint8_t) 2		/* Roomba no response error */
+#define ERROR_ROOMBA_SEND			(uint8_t) 3		/* Function sendByteToRoomba() failed */
+#define ERROR_BT_SEND				(uint8_t) 4		/* Function sendByteToBT() failed */
+#define ERROR_ROOMBA_RECEIVE		(uint8_t) 5		/* Function getByteFromRoomba() failed */
+#define ERROR_BT_RECEIVE			(uint8_t) 6		/* Function getByteFromBT() failed */
 
 
-/*-----------------------------------------------------------*/
 
-static void vRedLED( void *pvParameters );
-static void vGreenLED( void *pvParameters );
-static void vUART0TransmitService( void *pvParameters );
-static void vUART1TransmitService( void *pvParameters );
-static void vUART1ReceiveService( void *pvParameters );
-static void vCyclicalTask( void *pvParameters );
-void vApplicationIdleHook( void );
-static void sendMessage( unsigned char *message, QueueHandle_t queue);
-static void sendCharacter( unsigned char character, QueueHandle_t queue);
-static void flushQueue( QueueHandle_t queue);
+/*************************************************************/
+/*                    FUNCTION SIGNATURES                    */
+/*************************************************************/
+
+static    void vRoombaTransmitServiceUART0		( void *pvParameters );
+static    void vBluetoothTransmitServiceUART1	( void *pvParameters );
+static    void vBluetoothReceiveServiceUART1	( void *pvParameters );
+static    void vCyclicalTask					( void *pvParameters );
+static    void vErrorHandler					( void *pvParameters );
+          void vApplicationIdleHook				( void );
+
+static    void sendMessage						( unsigned char *message, QueueHandle_t queue);
+
+static    void sendByteToRoomba					( uint8_t byte );
+static uint8_t getByteFromRoomba				( void );
+
+static    void sendByteToBT						( uint8_t byte );
+static uint8_t getByteFromBT					( void );
+
+static    void error							( uint8_t byte );
+static    void flushQueue						( QueueHandle_t queue);
 
 
-/* -- UART0: SERIAL; UART1: BLUETOOTH -- */
+
+/*************************************************************/
+/*                     GLOBAL VARIABLES                      */
+/*************************************************************/
 
 /* Buffers for UART communication. */
-QueueHandle_t bufferSendUART0Serial, bufferReceiveUART0Serial, bufferSendUART1Bluetooth, bufferReceiveUART1Bluetooth;
+QueueHandle_t	bufferRoombaSendUART0, 
+				bufferRoombaReceiveUART0, 
+				bufferBluetoothSendUART1, 
+				bufferBluetoothReceiveUART1;
+
+/* Global error. */
+QueueHandle_t	globalError;
 
 /* Storage of values for Roomba sensors and sensors on MCU pins. */
 volatile uint8_t sensorData[27];
 
 
+
+/*************************************************************/
+/*                           MAIN                            */
+/*************************************************************/
+
+
 int main( void ) {
 
-	bufferSendUART0Serial = xQueueCreate(32, sizeof(unsigned char));
-	bufferReceiveUART0Serial = xQueueCreate(32, sizeof(unsigned char));
-	bufferSendUART1Bluetooth = xQueueCreate(32, sizeof(unsigned char));
-	bufferReceiveUART1Bluetooth = xQueueCreate(32, sizeof(unsigned char));
-
+	/* MCU pins direction setup. */
 	DDRB |= (1 << PB0);
 	DDRB |= (1 << PB1);
 
-	USART_Init();
+	/* Set baud rate UART0. */
+	UBRR0H = (uint8_t)(UBRR_UART0>>8);
+	UBRR0L = (uint8_t)UBRR_UART0;
 
-	/* Enable interrupts */
+	/* Set baud rate UART1. */
+	UBRR1H = (uint8_t)(UBRR_UART1>>8);
+	UBRR1L = (uint8_t)UBRR_UART1;
+
+	/* Enable receiver and transmitter UART0. */
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+
+	/* Enable receiver and transmitter UART1. */
+	UCSR1B = (1<<RXEN1)|(1<<TXEN1);
+
+	/* Enable interrupts. */
 	UCSR0B |= (1 << RXCIE0);
 	UCSR1B |= (1 << RXCIE1);
 	sei();
 
-	/* Create the tasks defined within this file. */
-	//xTaskCreate( vRedLED, "RedLED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL );
-	//xTaskCreate( vGreenLED, "GreenLED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL );
-	xTaskCreate( vUART0TransmitService, "UART0Tx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
-	xTaskCreate( vUART1TransmitService, "UART1Tx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
-	xTaskCreate( vUART1ReceiveService, "UART1Rx", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
-	//xTaskCreate( vCyclicalTask, "Cyclical", configMINIMAL_STACK_SIZE, NULL, mainUART_PRIORITY, NULL );
+	/* Create queues. */
+	bufferRoombaSendUART0		= xQueueCreate( 32, sizeof( uint8_t ) );
+	bufferRoombaReceiveUART0	= xQueueCreate( 32, sizeof( uint8_t ) );
+	bufferBluetoothSendUART1	= xQueueCreate( 32, sizeof( uint8_t ) );
+	bufferBluetoothReceiveUART1 = xQueueCreate( 32, sizeof( uint8_t ) );
+	globalError					= xQueueCreate(  1, sizeof( uint8_t ) );
+
+	/* Create the tasks. */
+	//xTaskCreate( vCyclicalTask,                  "Cyclic",  configMINIMAL_STACK_SIZE, NULL, mainLOW_PRIORITY,    NULL );
+	xTaskCreate( vRoombaTransmitServiceUART0,    "UART0Tx", configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY, NULL );
+	xTaskCreate( vBluetoothTransmitServiceUART1, "UART1Tx", configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY, NULL );
+	xTaskCreate( vBluetoothReceiveServiceUART1,	 "UART1Rx", configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY, NULL );
+	//xTaskCreate( vErrorHandler,                  "Error",   configMINIMAL_STACK_SIZE, NULL, mainHIGH_PRIORITY,   NULL );
 
 	vTaskStartScheduler();
 
 	return 0;
 }
-/*-----------------------------------------------------------*/
 
-static void vRedLED( void *pvParameters ) {
 
-	/* The parameters are not used. */
-	( void ) pvParameters;
 
-	for( ;; ) {
-		PORTB ^= (1 << PB0);
-		/* Periodically print sensor values for testing. */
-		sendMessage( "Sensors: ", bufferSendUART1Bluetooth );
-		sendMessage( sensorData, bufferSendUART1Bluetooth );
-		sendCharacter( '\r', bufferSendUART1Bluetooth );
-		sendCharacter( '\n', bufferSendUART1Bluetooth );
-		vTaskDelay( pdMS_TO_TICKS(3000) );
-	}
-}
 
-static void vGreenLED( void *pvParameters ) {
+
+/*************************************************************/
+/*                          TASKS                            */
+/*************************************************************/
+
+
+static void vCyclicalTask( void *pvParameters ) {
+	/* Service for cyclical operations such as:
+	    - Readout of Roomba sensors via serial
+		- Polling of sensors on MCU pins
+		- ...
+	*/
 
 	/* The parameters are not used. */
 	( void ) pvParameters;
-
+	
 	for( ;; ) {
-		PORTB ^= (1 << PB1);
-		vTaskDelay( pdMS_TO_TICKS(1000) );
+		
+		/*** READOUT OF ROOMBA SENSORS ***/
+
+		/* Clear Roomba receiving buffer. */
+		flushQueue(bufferRoombaReceiveUART0);
+
+		/* Send request to Roomba for sensor data (2 bytes). */
+		sendByteToRoomba( SCI_SENSORS_OPCODE );
+		sendByteToRoomba( SCI_SENSORS_PACKET0 );
+
+		/* Receive and store sensor data bytes from Roomba into sensorData[] (as first 26 bytes). */
+		for( uint8_t i = 0; i < SCI_SENSORS_PACKET0_BYTES; ++i ) {
+			sensorData[i] = getByteFromRoomba();
+		}
+
+
+		/*** POLLING SENSORS ON MCU PINS ***/
+		
+		/* TODO */
+
+
+		/* Cyclical delay. */
+		vTaskDelay( pdMS_TO_TICKS(500) );
 	}
 }
 
-static void vUART0TransmitService( void *pvParameters ) {
+
+static void vRoombaTransmitServiceUART0( void *pvParameters ) {
 	
 	/* The parameters are not used. */
 	( void ) pvParameters;
@@ -118,12 +193,13 @@ static void vUART0TransmitService( void *pvParameters ) {
 	for( ;; ) {
 		/* Waits for bufferSendUART0 to fill, then pops first byte of data and
 		   copies it to UART0 data register UDR0 effectively transmitting it. */ 
-		xQueueReceive( bufferSendUART0Serial, &UDR0, portMAX_DELAY );
+		xQueueReceive( bufferRoombaSendUART0, &UDR0, portMAX_DELAY );
 		while(!( UCSR0A & (1<<UDRE0)));		// Wait for transmit to finish
 	}
 }
 
-static void vUART1TransmitService( void *pvParameters ) {
+
+static void vBluetoothTransmitServiceUART1( void *pvParameters ) {
 	
 	/* The parameters are not used. */
 	( void ) pvParameters;
@@ -131,12 +207,13 @@ static void vUART1TransmitService( void *pvParameters ) {
 	for( ;; ) {
 		/* Waits for bufferSendUART1 to fill, then pops first byte of data and
 		   copies it to UART1 data register UDR1 effectively transmitting it. */ 
-		xQueueReceive( bufferSendUART1Bluetooth, &UDR1, portMAX_DELAY );
+		xQueueReceive( bufferBluetoothSendUART1, &UDR1, portMAX_DELAY );
 		while(!( UCSR1A & (1<<UDRE1)));		// Wait for transmit to finish
 	}
 }
 
-static void vUART1ReceiveService( void *pvParameters ) {
+
+static void vBluetoothReceiveServiceUART1( void *pvParameters ) {
 	
 	/* General purpose variables. */
 	uint8_t opcode, data, numberOfDataBytes;
@@ -145,10 +222,14 @@ static void vUART1ReceiveService( void *pvParameters ) {
 	( void ) pvParameters;
 	
 	for( ;; ) {
-		xQueueReceive( bufferReceiveUART1Bluetooth, &opcode, portMAX_DELAY );
+		
+		/* Wait until opcode is received from Bluetooth. */
+		xQueueReceive( bufferBluetoothReceiveUART1, &opcode, portMAX_DELAY );
 
+		/* If opcode is meant for Roomba pass it to serial along with any accompanying data bytes. */
 		if( opcode >= SCI_START_OPCODE && opcode <= SCI_FORCE_SEEKING_DOCK_OPCODE ) {
 			
+			/* Set number of accompanying data bytes according to Roomba SCI specification. */
 			switch( opcode ) {
 				case SCI_START_OPCODE:
 				case SCI_CONTROL_OPCODE:
@@ -164,83 +245,132 @@ static void vUART1ReceiveService( void *pvParameters ) {
 				case SCI_BAUD_OPCODE:
 				case SCI_MOTORS_OPCODE:
 				case SCI_PLAY_OPCODE:
-				case SCI_SENSORS_OPCODE:
+				case SCI_SENSORS_OPCODE: // Special case - returns data
 					numberOfDataBytes = 1;
 					break;
 				case SCI_LEDS_OPCODE:
-					numberOfDataBytes = 3;
-					break;
-				case SCI_SONG_OPCODE: // Special case - variable length
+				case SCI_SONG_OPCODE: // Special case - variable length, 3 byte header
 					numberOfDataBytes = 3;
 					break;
 				case SCI_DRIVE_OPCODE:
 					numberOfDataBytes = 4;
 					break;
 				default:
-				break;
+					numberOfDataBytes = 0;
+					break;
 			}
-			sendCharacter(opcode, bufferSendUART0Serial);
-			while( numberOfDataBytes ) {
-				xQueueReceive( bufferReceiveUART1Bluetooth, &data, 0 );
-				sendCharacter(data, bufferSendUART0Serial);
-				--numberOfDataBytes;
+
+			/* Send opcode byte to Roomba. */
+			sendByteToRoomba( opcode );
+
+			/* Handle standard Roomba opcodes. */
+			if( opcode != SCI_SENSORS_OPCODE && opcode != SCI_SONG_OPCODE ) {
+
+				/* Send data bytes from BT to Roomba. */
+				while( numberOfDataBytes-- ) {
+					sendByteToRoomba( getByteFromBT() );
+				}
 			}
+
+			/* Handle special case: request sensor data from Roomba. */
+			else if( opcode == SCI_SENSORS_OPCODE ) {
+
+				/* Receive SCI sensors data byte from Bluetooth and send it to Roomba. */
+				data = getByteFromBT();
+				sendByteToRoomba( data );
+
+				/* Set number of expected data bytes to receive from Roomba according to SCI sensors data byte. */
+				switch (data) {
+					case SCI_SENSORS_PACKET0:
+						numberOfDataBytes = SCI_SENSORS_PACKET0_BYTES;
+						break;
+					case SCI_SENSORS_PACKET1:
+						numberOfDataBytes = SCI_SENSORS_PACKET1_BYTES;
+						break;
+					case SCI_SENSORS_PACKET2:
+						numberOfDataBytes = SCI_SENSORS_PACKET2_BYTES;
+						break;
+					case SCI_SENSORS_PACKET3:
+						numberOfDataBytes = SCI_SENSORS_PACKET3_BYTES;
+						break;
+					default:
+						numberOfDataBytes = 0;
+						break;
+				}
+
+				/* Receive and store sensor data bytes from Roomba into sensorData[] (as first n bytes). */
+				for( uint8_t i = 0; i < numberOfDataBytes; ++i ) {
+					sensorData[i] = getByteFromRoomba();
+				}
+			}
+
+			/* Handle special case: send new song to Roomba. */
+			else if( opcode == SCI_SONG_OPCODE ) {
+				
+				/* Receive SCI song number byte from Bluetooth and send it to Roomba. */
+				sendByteToRoomba( getByteFromBT() );
+
+				/* Receive SCI song length byte from Bluetooth and send it to Roomba. */
+				data = getByteFromBT();
+				sendByteToRoomba( data );
+
+				/* Song length is specified in notes. Each note consists of 2 bytes (note number and note duration). */
+				numberOfDataBytes = 2 * data;
+
+				/* Send notes to Roomba. */
+				for( uint8_t i = 0; i < numberOfDataBytes; ++i ) {
+					sendByteToRoomba( getByteFromBT() );
+				}
+			}
+
 		}
 	}
 }
 
-static void vCyclicalTask( void *pvParameters ) {
-	/* Service for cyclical operations such as:
-	    - Readout of Roomba sensors via serial
-		- Polling of sensors on MCU pins
-		- ...
-	*/
 
-	/* General purpose variables. */
-	uint8_t buffer;
-
+static void vErrorHandler( void *pvParameters ) {
+	
 	/* The parameters are not used. */
 	( void ) pvParameters;
 	
 	for( ;; ) {
 		
-		/*** READOUT OF ROOMBA SENSORS ***/
-
-		/* Clear Roomba receiving buffer. */
-		flushQueue(bufferReceiveUART0Serial);
-
-		/* Send request to Roomba for sensor data (2 bytes). */
-		buffer = SCI_SENSORS_OPCODE;
-		xQueueSendToBack( bufferSendUART0Serial, &buffer, pdMS_TO_TICKS(10) );
-		buffer = SCI_SENSORS_PACKET0;
-		xQueueSendToBack( bufferSendUART0Serial, &buffer, pdMS_TO_TICKS(10) );
-
-		/* Receive 26 bytes of sensor data from Roomba. */
-		for( uint8_t i = 0; i < 26; ++i ) {
-			if( errQUEUE_EMPTY == xQueueReceive( bufferReceiveUART0Serial, (sensorData + i), pdMS_TO_TICKS(50) )) {
-				// Roomba not ready. Exit loop.
-				break;
-			}
-		}
-
-		/*** POLLING SENSORS ON MCU PINS ***/
-
-
-
-		/* Cyclical delay. */
-		vTaskDelay( pdMS_TO_TICKS(3000) );
 	}
 }
 
-static void vSendCommandToRoomba( void *pvParameters ) {
-	
-	/* The parameters are not used. */
-	( void ) pvParameters;
-	
-	for( ;; ) {
-		
-	}
+
+void vApplicationIdleHook( void ) {
+	//PORTB ^= (1 << PB1);
 }
+
+
+
+
+
+/*************************************************************/
+/*                INTERRUPT SERVICE ROUTINES                 */
+/*************************************************************/
+
+
+ISR(USART0_RX_vect) {
+	/* UART0 receive complete ISR. 
+	   Pushes received byte from UDR0 register on bufferRoombaReceiveUART0 queue. */
+	xQueueSendToBackFromISR( bufferRoombaReceiveUART0, &UDR0, NULL);
+}
+
+ISR(USART1_RX_vect) {
+/* UART1 receive complete ISR. 
+	   Pushes received byte from UDR1 register on bufferBluetoothReceiveUART1 queue. */
+	xQueueSendToBackFromISR( bufferBluetoothReceiveUART1, &UDR1, NULL);
+}
+
+
+
+
+
+/*************************************************************/
+/*                    UTILITY FUNCTIONS                      */
+/*************************************************************/
 
 
 static void sendMessage( unsigned char *message, QueueHandle_t queue) {
@@ -248,14 +378,45 @@ static void sendMessage( unsigned char *message, QueueHandle_t queue) {
 	   Limited to 255 characters for efficiency (counter i takes one byte). 
 	   Message must be null terminated. */
 	for(uint8_t i = 0; message[i] != '\0'; ++i) {
-		xQueueSendToBack( queue, message+i, pdMS_TO_TICKS(10));
+		xQueueSendToBack( queue, message+i, pdMS_TO_TICKS(30) );
 	}
 }
 
+static void sendByteToRoomba( uint8_t byte ) {
+	/* Pushes byte on UART0 send queue. */
+	if( errQUEUE_FULL == xQueueSendToBack( bufferRoombaSendUART0, &byte, pdMS_TO_TICKS(30) ) ) {
+		error(ERROR_ROOMBA_SEND);
+	}
+}
 
-static void sendCharacter( unsigned char character, QueueHandle_t queue) {
-	/* Receives a character and pushes it on UART send queue. */
-	xQueueSendToBack( queue, &character, pdMS_TO_TICKS(10));
+static uint8_t getByteFromRoomba( void ) {
+	/* Gets byte from UART0 receive queue. */
+	uint8_t byte;
+	if( errQUEUE_EMPTY == xQueueReceive( bufferRoombaReceiveUART0, &byte, pdMS_TO_TICKS(30) ) ) {
+		error(ERROR_BT_RECEIVE);
+	}
+	return byte;
+}
+
+static void sendByteToBT( uint8_t byte ) {
+	/* Pushes byte on UART1 send queue. */
+	if( errQUEUE_FULL == xQueueSendToBack( bufferBluetoothSendUART1, &byte, pdMS_TO_TICKS(30) ) ) {
+		error(ERROR_BT_SEND);
+	}
+}
+
+static uint8_t getByteFromBT( void ) {
+	/* Gets byte from UART1 receive queue. */
+	uint8_t byte;
+	if( errQUEUE_EMPTY == xQueueReceive( bufferBluetoothReceiveUART1, &byte, pdMS_TO_TICKS(30) ) ) {
+		error(ERROR_BT_RECEIVE);
+	}
+	return byte;
+}
+
+static void error( uint8_t byte ) {
+	/* Receives an error and pushes it on globalError queue. */
+	xQueueSendToBack( globalError, &byte, 0 );
 }
 
 static void flushQueue( QueueHandle_t queue) {
@@ -264,22 +425,3 @@ static void flushQueue( QueueHandle_t queue) {
 		xQueueReceive( queue, NULL, 0 );
 	}
 }
-
-void vApplicationIdleHook( void ) {
-	//PORTB ^= (1 << PB1);
-}
-
-ISR(USART0_RX_vect) {
-	/* UART0 receive complete ISR. 
-	   Pushes received byte from UDR0 register on bufferReceiveUART0Serial queue. */
-	xQueueSendToBackFromISR( bufferReceiveUART0Serial, &UDR0, NULL);
-}
-
-ISR(USART1_RX_vect) {
-/* UART1 receive complete ISR. 
-	   Pushes received byte from UDR1 register on bufferReceiveUART1Bluetooth queue. */
-	xQueueSendToBackFromISR( bufferReceiveUART1Bluetooth, &UDR1, NULL);
-}
-
-/*-----------------------------------------------------------*/
-
