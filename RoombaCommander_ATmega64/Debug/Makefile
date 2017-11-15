@@ -56,10 +56,7 @@ C_SRCS +=  \
 ../FreeRTOS/Source/queue.c \
 ../FreeRTOS/Source/tasks.c \
 ../FreeRTOS/Source/timers.c \
-../main.c \
-../ATmega64UART.c \
-../message.c \
-../serial.c
+../main.c
 
 
 PREPROCESSING_SRCS += 
@@ -77,10 +74,7 @@ FreeRTOS/Source/portable/MemMang/heap_1.o \
 FreeRTOS/Source/queue.o \
 FreeRTOS/Source/tasks.o \
 FreeRTOS/Source/timers.o \
-main.o \
-ATmega64UART.o \
-message.o \
-serial.o
+main.o
 
 OBJS_AS_ARGS +=  \
 FreeRTOS/Source/croutine.o \
@@ -91,10 +85,7 @@ FreeRTOS/Source/portable/MemMang/heap_1.o \
 FreeRTOS/Source/queue.o \
 FreeRTOS/Source/tasks.o \
 FreeRTOS/Source/timers.o \
-main.o \
-ATmega64UART.o \
-message.o \
-serial.o
+main.o
 
 C_DEPS +=  \
 FreeRTOS/Source/croutine.d \
@@ -105,10 +96,7 @@ FreeRTOS/Source/portable/MemMang/heap_1.d \
 FreeRTOS/Source/queue.d \
 FreeRTOS/Source/tasks.d \
 FreeRTOS/Source/timers.d \
-main.d \
-ATmega64UART.d \
-message.d \
-serial.d
+main.d
 
 C_DEPS_AS_ARGS +=  \
 FreeRTOS/Source/croutine.d \
@@ -119,10 +107,7 @@ FreeRTOS/Source/portable/MemMang/heap_1.d \
 FreeRTOS/Source/queue.d \
 FreeRTOS/Source/tasks.d \
 FreeRTOS/Source/timers.d \
-main.d \
-ATmega64UART.d \
-message.d \
-serial.d
+main.d
 
 OUTPUT_FILE_PATH +=RoombaCommander_ATmega64.elf
 
@@ -138,12 +123,6 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-
-
-
-
-
-
 
 
 

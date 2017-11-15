@@ -220,25 +220,7 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ATmega64UART.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="message.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="message.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="msgHeaders.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="RoombaSCI.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="serial.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="serial.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

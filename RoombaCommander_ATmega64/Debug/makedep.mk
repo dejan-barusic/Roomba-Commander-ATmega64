@@ -20,9 +20,3 @@ FreeRTOS\Source\timers.c
 
 main.c
 
-ATmega64UART.c
-
-message.c
-
-serial.c
-
