@@ -53,6 +53,7 @@
 /*                    FUNCTION SIGNATURES                    */
 /*************************************************************/
 
+static    void vPeriodicTask					( void *pvParameters );
 static    void vRoombaTransmitServiceUART0		( void *pvParameters );
 static    void vBluetoothTransmitServiceUART1	( void *pvParameters );
 static    void vBluetoothReceiveCommandUART1	( void *pvParameters );
@@ -132,10 +133,11 @@ int main( void ) {
 	globalError					= xQueueCreate(  1, sizeof( uint8_t ) );
 
 	/* Create the tasks. */
-	xTaskCreate( vBluetoothReceiveCommandUART1,	 "BTcmd",   configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY, NULL );
-	xTaskCreate( vRoombaTransmitServiceUART0,    "UART0Tx", configMINIMAL_STACK_SIZE, NULL, mainHIGH_PRIORITY,   NULL );
-	xTaskCreate( vBluetoothTransmitServiceUART1, "UART1Tx", configMINIMAL_STACK_SIZE, NULL, mainHIGH_PRIORITY,   NULL );
-	xTaskCreate( vErrorHandler,                  "Error",   configMINIMAL_STACK_SIZE, NULL, mainERROR_PRIORITY,  NULL );
+	xTaskCreate( vPeriodicTask,                  "Periodic", configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY,    NULL );
+	xTaskCreate( vBluetoothReceiveCommandUART1,	 "BTcmd",    configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY, NULL );
+	xTaskCreate( vRoombaTransmitServiceUART0,    "UART0Tx",  configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY,   NULL );
+	xTaskCreate( vBluetoothTransmitServiceUART1, "UART1Tx",  configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY,   NULL );
+	xTaskCreate( vErrorHandler,                  "Error",    configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY,  NULL );
 
 	vTaskStartScheduler( );
 
@@ -150,6 +152,58 @@ int main( void ) {
 /*                          TASKS                            */
 /*************************************************************/
 
+
+static void vPeriodicTask( void *pvParameters ) {
+	/* Service for cyclical operations such as:
+		- Polling of sensors on MCU pins
+		- ...
+	*/
+
+	/* The parameters are not used. */
+	( void ) pvParameters;
+
+	uint8_t analogSensor = 0;
+	uint8_t sensoresUsed = 1;
+
+	/* Enable ADC and set prescaler. */
+	ADCSRA = ( 1 << ADEN ) | ( 1 << ADPS2 ) | ( 1 << ADPS1 ) | ( 1 << ADPS0 );
+
+	/* Set ADC voltage ref. selection and left adjust result. */
+	ADMUX = ( 1 << REFS0 ) | ( 1 << ADLAR );
+	
+	for( ;; ) {
+
+		PORTB ^= (1 << PB0);
+
+		/* Write sensor data. */
+		sensorDataMCU[ analogSensor ] = ADCH;
+
+		/* TEST */
+		sendByteToBT( sensorDataMCU[0] );
+		
+		/* Clear MUX4:0 bits. */
+		ADMUX |= 0xF0;
+
+		/* Set MUX4:0 bits with new sensor. */
+		ADMUX |= analogSensor;
+		
+		/* Start ADC in single conversion mode. */
+		ADCSRA |= ( 1 << ADSC );
+
+		//if( analogSensor >= sensoresUsed ) {
+			//analogSensor = 0;
+		//}
+
+		/* Wait for AD conversion to complete.
+		   TODO: Implement interrupt driven ADC. */
+		//while( ADSC );
+
+		
+
+		/* Periodic delay. */
+		vTaskDelay( pdMS_TO_TICKS( 2000 ) );
+	}
+}
 
 static void vRoombaTransmitServiceUART0( void *pvParameters ) {
 	
