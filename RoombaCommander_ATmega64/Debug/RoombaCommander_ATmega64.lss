@@ -3,31 +3,31 @@ RoombaCommander_ATmega64.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         0000002a  00800100  00002a18  00002aac  2**0
+  0 .data         0000002a  00800100  00002a24  00002ab8  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00002a18  00000000  00000000  00000094  2**1
+  1 .text         00002a24  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000cbd  0080012a  0080012a  00002ad6  2**0
+  2 .bss          00000cbd  0080012a  0080012a  00002ae2  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00002ad6  2**0
+  3 .comment      00000030  00000000  00000000  00002ae2  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00002b08  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00002b14  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000460  00000000  00000000  00002b44  2**0
+  5 .debug_aranges 00000460  00000000  00000000  00002b50  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000054cc  00000000  00000000  00002fa4  2**0
+  6 .debug_info   000054d1  00000000  00000000  00002fb0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000153d  00000000  00000000  00008470  2**0
+  7 .debug_abbrev 0000153d  00000000  00000000  00008481  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00002e5a  00000000  00000000  000099ad  2**0
+  8 .debug_line   00002e6c  00000000  00000000  000099be  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000e14  00000000  00000000  0000c808  2**2
+  9 .debug_frame  00000e14  00000000  00000000  0000c82c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00001a0e  00000000  00000000  0000d61c  2**0
+ 10 .debug_str    00001a01  00000000  00000000  0000d640  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000503a  00000000  00000000  0000f02a  2**0
+ 11 .debug_loc    00005059  00000000  00000000  0000f041  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000468  00000000  00000000  00014064  2**0
+ 12 .debug_ranges 00000468  00000000  00000000  0001409a  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -51,7 +51,7 @@ Disassembly of section .text:
       3c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
       40:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
       44:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
-      48:	0c 94 a1 14 	jmp	0x2942	; 0x2942 <__vector_18>
+      48:	0c 94 a7 14 	jmp	0x294e	; 0x294e <__vector_18>
       4c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
       50:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
       54:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
@@ -63,7 +63,7 @@ Disassembly of section .text:
       6c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
       70:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
       74:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
-      78:	0c 94 ce 14 	jmp	0x299c	; 0x299c <__vector_30>
+      78:	0c 94 d4 14 	jmp	0x29a8	; 0x29a8 <__vector_30>
       7c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
       80:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
       84:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
@@ -97,7 +97,7 @@ Disassembly of section .text:
       b8:	11 e0       	ldi	r17, 0x01	; 1
       ba:	a0 e0       	ldi	r26, 0x00	; 0
       bc:	b1 e0       	ldi	r27, 0x01	; 1
-      be:	e8 e1       	ldi	r30, 0x18	; 24
+      be:	e4 e2       	ldi	r30, 0x24	; 36
       c0:	fa e2       	ldi	r31, 0x2A	; 42
       c2:	02 c0       	rjmp	.+4      	; 0xc8 <__do_copy_data+0x10>
       c4:	05 90       	lpm	r0, Z+
@@ -119,8 +119,8 @@ Disassembly of section .text:
       d8:	a7 3e       	cpi	r26, 0xE7	; 231
       da:	b2 07       	cpc	r27, r18
       dc:	e1 f7       	brne	.-8      	; 0xd6 <.do_clear_bss_loop>
-      de:	0e 94 18 14 	call	0x2830	; 0x2830 <main>
-      e2:	0c 94 0a 15 	jmp	0x2a14	; 0x2a14 <_exit>
+      de:	0e 94 1e 14 	call	0x283c	; 0x283c <main>
+      e2:	0c 94 10 15 	jmp	0x2a20	; 0x2a20 <_exit>
 
 000000e6 <__bad_interrupt>:
       e6:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -2792,7 +2792,7 @@ UBaseType_t uxMessagesWaiting;
      ce6:	50 e0       	ldi	r21, 0x00	; 0
      ce8:	8c 81       	ldd	r24, Y+4	; 0x04
      cea:	9d 81       	ldd	r25, Y+5	; 0x05
-     cec:	0e 94 01 15 	call	0x2a02	; 0x2a02 <memcpy>
+     cec:	0e 94 07 15 	call	0x2a0e	; 0x2a0e <memcpy>
 		pxQueue->pcWriteTo += pxQueue->uxItemSize;
      cf0:	2c 8d       	ldd	r18, Y+28	; 0x1c
      cf2:	8c 81       	ldd	r24, Y+4	; 0x04
@@ -2830,7 +2830,7 @@ BaseType_t xReturn = pdFALSE;
      d14:	50 e0       	ldi	r21, 0x00	; 0
      d16:	8e 81       	ldd	r24, Y+6	; 0x06
      d18:	9f 81       	ldd	r25, Y+7	; 0x07
-     d1a:	0e 94 01 15 	call	0x2a02	; 0x2a02 <memcpy>
+     d1a:	0e 94 07 15 	call	0x2a0e	; 0x2a0e <memcpy>
 		pxQueue->u.pcReadFrom -= pxQueue->uxItemSize;
      d1e:	8c 8d       	ldd	r24, Y+28	; 0x1c
      d20:	90 e0       	ldi	r25, 0x00	; 0
@@ -2948,7 +2948,7 @@ static void prvCopyDataFromQueue( Queue_t * const pxQueue, void * const pvBuffer
 		( void ) memcpy( ( void * ) pvBuffer, ( void * ) pxQueue->u.pcReadFrom, ( size_t ) pxQueue->uxItemSize ); /*lint !e961 !e418 MISRA exception as the casts are only redundant for some ports.  Also previous logic ensures a null pointer can only be passed to memcpy() when the count is 0. */
      d9e:	66 81       	ldd	r22, Z+6	; 0x06
      da0:	77 81       	ldd	r23, Z+7	; 0x07
-     da2:	0e 94 01 15 	call	0x2a02	; 0x2a02 <memcpy>
+     da2:	0e 94 07 15 	call	0x2a0e	; 0x2a0e <memcpy>
      da6:	08 95       	ret
 
 00000da8 <prvUnlockQueue>:
@@ -4767,7 +4767,7 @@ BaseType_t xReturn;
     148e:	6e 81       	ldd	r22, Y+6	; 0x06
     1490:	7f 81       	ldd	r23, Y+7	; 0x07
     1492:	c9 01       	movw	r24, r18
-    1494:	0e 94 01 15 	call	0x2a02	; 0x2a02 <memcpy>
+    1494:	0e 94 07 15 	call	0x2a0e	; 0x2a0e <memcpy>
 
 				xReturn = pdPASS;
 
@@ -4960,7 +4960,7 @@ BaseType_t xReturn;
     154a:	66 81       	ldd	r22, Z+6	; 0x06
     154c:	77 81       	ldd	r23, Z+7	; 0x07
     154e:	a9 01       	movw	r20, r18
-    1550:	0e 94 01 15 	call	0x2a02	; 0x2a02 <memcpy>
+    1550:	0e 94 07 15 	call	0x2a0e	; 0x2a0e <memcpy>
 
 			if( ( *pxCoRoutineWoken ) == pdFALSE )
     1554:	f8 01       	movw	r30, r16
@@ -5582,7 +5582,7 @@ const TickType_t xConstTickCount = xTickCount;
 			NOTE: vApplicationIdleHook() MUST NOT, UNDER ANY CIRCUMSTANCES,
 			CALL A FUNCTION THAT MIGHT BLOCK. */
 			vApplicationIdleHook();
-    184e:	0e 94 a0 14 	call	0x2940	; 0x2940 <vApplicationIdleHook>
+    184e:	0e 94 a6 14 	call	0x294c	; 0x294c <vApplicationIdleHook>
 			{
 				mtCOVERAGE_TEST_MARKER();
 			}
@@ -8902,7 +8902,7 @@ static void vBluetoothReceiveCommandUART1( void *pvParameters ) {
     27c2:	58 f7       	brcc	.-42     	; 0x279a <vBluetoothReceiveCommandUART1+0xa>
     27c4:	ea 5b       	subi	r30, 0xBA	; 186
     27c6:	ff 4f       	sbci	r31, 0xFF	; 255
-    27c8:	0c 94 fb 14 	jmp	0x29f6	; 0x29f6 <__tablejump2__>
+    27c8:	0c 94 01 15 	jmp	0x2a02	; 0x2a02 <__tablejump2__>
 			case SCI_POWER_OPCODE:
 			case SCI_SPOT_OPCODE:
 			case SCI_CLEAN_OPCODE:
@@ -8956,363 +8956,383 @@ static void vBluetoothReceiveCommandUART1( void *pvParameters ) {
     27f6:	d1 cf       	rjmp	.-94     	; 0x279a <vBluetoothReceiveCommandUART1+0xa>
 
 000027f8 <vPeriodicTask>:
-
-	uint8_t analogSensor = 0;
-	uint8_t sensoresUsed = 1;
-
-	/* Enable ADC and set prescaler. */
-	ADCSRA = ( 1 << ADEN ) | ( 1 << ADPS2 ) | ( 1 << ADPS1 ) | ( 1 << ADPS0 );
-    27f8:	87 e8       	ldi	r24, 0x87	; 135
+		Bit 4    – ADIF: ADC Interrupt Flag
+		Bit 3    – ADIE: ADC Interrupt Enable
+		Bits 2:0 – ADPS2:0: ADC Prescaler Select Bits
+	              **Selected division factor 16 (ADPS2:0 - 100), that is sufficient for 8 bit resolution**
+	*/
+	ADCSRA = ( 1 << ADEN ) | ( 1 << ADPS2 ) | ( 0 << ADPS1 ) | ( 0 << ADPS0 );
+    27f8:	84 e8       	ldi	r24, 0x84	; 132
     27fa:	86 b9       	out	0x06, r24	; 6
-
-	/* Set ADC voltage ref. selection and left adjust result. */
+	     Bit 5    – ADLAR: ADC Left Adjust Result
+		           **Enabled: result is formated so that high byte contains 8 bits of data and low remaining 2 bits.
+				    Only high byte is used (8 bit resolution), low byte is discarded.
+		 Bits 4:0 – MUX4:0: Analog Channel and Gain Selection Bits
+	*/
 	ADMUX = ( 1 << REFS0 ) | ( 1 << ADLAR );
     27fc:	80 e6       	ldi	r24, 0x60	; 96
     27fe:	87 b9       	out	0x07, r24	; 7
-	
+
 	for( ;; ) {
 
-		PORTB ^= (1 << PB0);
-    2800:	98 b3       	in	r25, 0x18	; 24
-    2802:	81 e0       	ldi	r24, 0x01	; 1
-    2804:	89 27       	eor	r24, r25
-    2806:	88 bb       	out	0x18, r24	; 24
+		for( uint8_t activeSensor = 0; activeSensor < ADC_CHANNELS_USED; ++activeSensor ) {
+    2800:	c0 e0       	ldi	r28, 0x00	; 0
+    2802:	15 c0       	rjmp	.+42     	; 0x282e <vPeriodicTask+0x36>
 
-		/* Write sensor data. */
-		sensorDataMCU[ analogSensor ] = ADCH;
-    2808:	85 b1       	in	r24, 0x05	; 5
-    280a:	e3 ec       	ldi	r30, 0xC3	; 195
-    280c:	fd e0       	ldi	r31, 0x0D	; 13
-    280e:	80 83       	st	Z, r24
+			/* Clear MUX4:0 (ADC channel selection bits). */
+			ADMUX &= 0xF0;
+    2804:	87 b1       	in	r24, 0x07	; 7
+    2806:	80 7f       	andi	r24, 0xF0	; 240
+    2808:	87 b9       	out	0x07, r24	; 7
 
-		/* TEST */
-		sendByteToBT( sensorDataMCU[0] );
-    2810:	80 81       	ld	r24, Z
-    2812:	0e 94 7c 13 	call	0x26f8	; 0x26f8 <sendByteToBT>
+			/* Set MUX4:0 bits with new sensor. */
+			ADMUX |= activeSensor;
+    280a:	87 b1       	in	r24, 0x07	; 7
+    280c:	8c 2b       	or	r24, r28
+    280e:	87 b9       	out	0x07, r24	; 7
 		
-		/* Clear MUX4:0 bits. */
-		ADMUX |= 0xF0;
-    2816:	87 b1       	in	r24, 0x07	; 7
-    2818:	80 6f       	ori	r24, 0xF0	; 240
-    281a:	87 b9       	out	0x07, r24	; 7
+			/* Start ADC in single conversion mode. */
+			ADCSRA |= ( 1 << ADSC );
+    2810:	86 b1       	in	r24, 0x06	; 6
+    2812:	80 64       	ori	r24, 0x40	; 64
+    2814:	86 b9       	out	0x06, r24	; 6
 
-		/* Set MUX4:0 bits with new sensor. */
-		ADMUX |= analogSensor;
-    281c:	87 b1       	in	r24, 0x07	; 7
-    281e:	87 b9       	out	0x07, r24	; 7
+			/* Wait for AD conversion to complete.
+			   TODO: Implement interrupt driven ADC. */
+			while( ( ADCSRA & ( 1 << ADSC ) ) != 0 );
+    2816:	36 99       	sbic	0x06, 6	; 6
+    2818:	fe cf       	rjmp	.-4      	; 0x2816 <vPeriodicTask+0x1e>
 		
-		/* Start ADC in single conversion mode. */
-		ADCSRA |= ( 1 << ADSC );
-    2820:	86 b1       	in	r24, 0x06	; 6
-    2822:	80 64       	ori	r24, 0x40	; 64
-    2824:	86 b9       	out	0x06, r24	; 6
-		//while( ADSC );
+			/* Write sensor data. */
+			sensorDataMCU[ activeSensor ] = ADCH;
+    281a:	ec 2f       	mov	r30, r28
+    281c:	f0 e0       	ldi	r31, 0x00	; 0
+    281e:	85 b1       	in	r24, 0x05	; 5
+    2820:	ed 53       	subi	r30, 0x3D	; 61
+    2822:	f2 4f       	sbci	r31, 0xF2	; 242
+    2824:	80 83       	st	Z, r24
 
-		
+			/* TEST */
+			sendByteToBT( sensorDataMCU[ activeSensor ] );
+    2826:	80 81       	ld	r24, Z
+    2828:	0e 94 7c 13 	call	0x26f8	; 0x26f8 <sendByteToBT>
+	*/
+	ADMUX = ( 1 << REFS0 ) | ( 1 << ADLAR );
+
+	for( ;; ) {
+
+		for( uint8_t activeSensor = 0; activeSensor < ADC_CHANNELS_USED; ++activeSensor ) {
+    282c:	cf 5f       	subi	r28, 0xFF	; 255
+    282e:	c4 30       	cpi	r28, 0x04	; 4
+    2830:	48 f3       	brcs	.-46     	; 0x2804 <vPeriodicTask+0xc>
+			/* TEST */
+			sendByteToBT( sensorDataMCU[ activeSensor ] );
+		}		
 
 		/* Periodic delay. */
-		vTaskDelay( pdMS_TO_TICKS( 2000 ) );
-    2826:	88 ec       	ldi	r24, 0xC8	; 200
-    2828:	90 e0       	ldi	r25, 0x00	; 0
-    282a:	0e 94 3b 0e 	call	0x1c76	; 0x1c76 <vTaskDelay>
-    282e:	e8 cf       	rjmp	.-48     	; 0x2800 <vPeriodicTask+0x8>
+		vTaskDelay( pdMS_TO_TICKS( 500 ) );
+    2832:	82 e3       	ldi	r24, 0x32	; 50
+    2834:	90 e0       	ldi	r25, 0x00	; 0
+    2836:	0e 94 3b 0e 	call	0x1c76	; 0x1c76 <vTaskDelay>
+	}
+    283a:	e2 cf       	rjmp	.-60     	; 0x2800 <vPeriodicTask+0x8>
 
-00002830 <main>:
+0000283c <main>:
 /*************************************************************/
 /*                           MAIN                            */
 /*************************************************************/
 
 
 int main( void ) {
-    2830:	ef 92       	push	r14
-    2832:	ff 92       	push	r15
-    2834:	0f 93       	push	r16
+    283c:	ef 92       	push	r14
+    283e:	ff 92       	push	r15
+    2840:	0f 93       	push	r16
 
 	/* MCU pins direction setup. */
 	DDRB |= ( 1 << PB0 );
-    2836:	87 b3       	in	r24, 0x17	; 23
-    2838:	81 60       	ori	r24, 0x01	; 1
-    283a:	87 bb       	out	0x17, r24	; 23
+    2842:	87 b3       	in	r24, 0x17	; 23
+    2844:	81 60       	ori	r24, 0x01	; 1
+    2846:	87 bb       	out	0x17, r24	; 23
 	DDRB |= ( 1 << PB1 );
-    283c:	87 b3       	in	r24, 0x17	; 23
-    283e:	82 60       	ori	r24, 0x02	; 2
-    2840:	87 bb       	out	0x17, r24	; 23
+    2848:	87 b3       	in	r24, 0x17	; 23
+    284a:	82 60       	ori	r24, 0x02	; 2
+    284c:	87 bb       	out	0x17, r24	; 23
 
 	/* Set baud rate UART0. */
 	UBRR0H = ( uint8_t ) ( UBRR_UART0 >> 8 );
-    2842:	10 92 90 00 	sts	0x0090, r1	; 0x800090 <__TEXT_REGION_LENGTH__+0x7e0090>
+    284e:	10 92 90 00 	sts	0x0090, r1	; 0x800090 <__TEXT_REGION_LENGTH__+0x7e0090>
 	UBRR0L = ( uint8_t )   UBRR_UART0;
-    2846:	85 e0       	ldi	r24, 0x05	; 5
-    2848:	89 b9       	out	0x09, r24	; 9
+    2852:	85 e0       	ldi	r24, 0x05	; 5
+    2854:	89 b9       	out	0x09, r24	; 9
 
 	/* Set baud rate UART1. */
 	UBRR1H = ( uint8_t ) ( UBRR_UART1 >> 8 );
-    284a:	10 92 98 00 	sts	0x0098, r1	; 0x800098 <__TEXT_REGION_LENGTH__+0x7e0098>
+    2856:	10 92 98 00 	sts	0x0098, r1	; 0x800098 <__TEXT_REGION_LENGTH__+0x7e0098>
 	UBRR1L = ( uint8_t )   UBRR_UART1;
-    284e:	87 e4       	ldi	r24, 0x47	; 71
-    2850:	80 93 99 00 	sts	0x0099, r24	; 0x800099 <__TEXT_REGION_LENGTH__+0x7e0099>
+    285a:	87 e4       	ldi	r24, 0x47	; 71
+    285c:	80 93 99 00 	sts	0x0099, r24	; 0x800099 <__TEXT_REGION_LENGTH__+0x7e0099>
 
 	/* Enable receiver and transmitter UART0. */
 	UCSR0B = ( 1 << RXEN0 ) | ( 1 << TXEN0 );
-    2854:	88 e1       	ldi	r24, 0x18	; 24
-    2856:	8a b9       	out	0x0a, r24	; 10
+    2860:	88 e1       	ldi	r24, 0x18	; 24
+    2862:	8a b9       	out	0x0a, r24	; 10
 
 	/* Enable receiver and transmitter UART1. */
 	UCSR1B = ( 1 << RXEN1 ) | ( 1 << TXEN1 );
-    2858:	ea e9       	ldi	r30, 0x9A	; 154
-    285a:	f0 e0       	ldi	r31, 0x00	; 0
-    285c:	80 83       	st	Z, r24
+    2864:	ea e9       	ldi	r30, 0x9A	; 154
+    2866:	f0 e0       	ldi	r31, 0x00	; 0
+    2868:	80 83       	st	Z, r24
 
 	/* Enable interrupts. */
 	UCSR0B |= ( 1 << RXCIE0 );
-    285e:	8a b1       	in	r24, 0x0a	; 10
-    2860:	80 68       	ori	r24, 0x80	; 128
-    2862:	8a b9       	out	0x0a, r24	; 10
+    286a:	8a b1       	in	r24, 0x0a	; 10
+    286c:	80 68       	ori	r24, 0x80	; 128
+    286e:	8a b9       	out	0x0a, r24	; 10
 	UCSR1B |= ( 1 << RXCIE1 );
-    2864:	80 81       	ld	r24, Z
-    2866:	80 68       	ori	r24, 0x80	; 128
-    2868:	80 83       	st	Z, r24
+    2870:	80 81       	ld	r24, Z
+    2872:	80 68       	ori	r24, 0x80	; 128
+    2874:	80 83       	st	Z, r24
 	sei( );
-    286a:	78 94       	sei
+    2876:	78 94       	sei
 
 	/* Create queues. */
 	bufferRoombaSendUART0		= xQueueCreate( 32, sizeof( uint8_t ) );
-    286c:	40 e0       	ldi	r20, 0x00	; 0
-    286e:	61 e0       	ldi	r22, 0x01	; 1
-    2870:	80 e2       	ldi	r24, 0x20	; 32
-    2872:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
-    2876:	90 93 bc 0d 	sts	0x0DBC, r25	; 0x800dbc <bufferRoombaSendUART0+0x1>
-    287a:	80 93 bb 0d 	sts	0x0DBB, r24	; 0x800dbb <bufferRoombaSendUART0>
+    2878:	40 e0       	ldi	r20, 0x00	; 0
+    287a:	61 e0       	ldi	r22, 0x01	; 1
+    287c:	80 e2       	ldi	r24, 0x20	; 32
+    287e:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
+    2882:	90 93 bc 0d 	sts	0x0DBC, r25	; 0x800dbc <bufferRoombaSendUART0+0x1>
+    2886:	80 93 bb 0d 	sts	0x0DBB, r24	; 0x800dbb <bufferRoombaSendUART0>
 	bufferRoombaReceiveUART0	= xQueueCreate( 32, sizeof( uint8_t ) );
-    287e:	40 e0       	ldi	r20, 0x00	; 0
-    2880:	61 e0       	ldi	r22, 0x01	; 1
-    2882:	80 e2       	ldi	r24, 0x20	; 32
-    2884:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
-    2888:	90 93 e6 0d 	sts	0x0DE6, r25	; 0x800de6 <bufferRoombaReceiveUART0+0x1>
-    288c:	80 93 e5 0d 	sts	0x0DE5, r24	; 0x800de5 <bufferRoombaReceiveUART0>
+    288a:	40 e0       	ldi	r20, 0x00	; 0
+    288c:	61 e0       	ldi	r22, 0x01	; 1
+    288e:	80 e2       	ldi	r24, 0x20	; 32
+    2890:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
+    2894:	90 93 e6 0d 	sts	0x0DE6, r25	; 0x800de6 <bufferRoombaReceiveUART0+0x1>
+    2898:	80 93 e5 0d 	sts	0x0DE5, r24	; 0x800de5 <bufferRoombaReceiveUART0>
 	bufferBluetoothSendUART1	= xQueueCreate( 32, sizeof( uint8_t ) );
-    2890:	40 e0       	ldi	r20, 0x00	; 0
-    2892:	61 e0       	ldi	r22, 0x01	; 1
-    2894:	80 e2       	ldi	r24, 0x20	; 32
-    2896:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
-    289a:	90 93 be 0d 	sts	0x0DBE, r25	; 0x800dbe <bufferBluetoothSendUART1+0x1>
-    289e:	80 93 bd 0d 	sts	0x0DBD, r24	; 0x800dbd <bufferBluetoothSendUART1>
+    289c:	40 e0       	ldi	r20, 0x00	; 0
+    289e:	61 e0       	ldi	r22, 0x01	; 1
+    28a0:	80 e2       	ldi	r24, 0x20	; 32
+    28a2:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
+    28a6:	90 93 be 0d 	sts	0x0DBE, r25	; 0x800dbe <bufferBluetoothSendUART1+0x1>
+    28aa:	80 93 bd 0d 	sts	0x0DBD, r24	; 0x800dbd <bufferBluetoothSendUART1>
 	bufferBluetoothReceiveUART1 = xQueueCreate( 32, sizeof( uint8_t ) );
-    28a2:	40 e0       	ldi	r20, 0x00	; 0
-    28a4:	61 e0       	ldi	r22, 0x01	; 1
-    28a6:	80 e2       	ldi	r24, 0x20	; 32
-    28a8:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
-    28ac:	90 93 c2 0d 	sts	0x0DC2, r25	; 0x800dc2 <bufferBluetoothReceiveUART1+0x1>
-    28b0:	80 93 c1 0d 	sts	0x0DC1, r24	; 0x800dc1 <bufferBluetoothReceiveUART1>
+    28ae:	40 e0       	ldi	r20, 0x00	; 0
+    28b0:	61 e0       	ldi	r22, 0x01	; 1
+    28b2:	80 e2       	ldi	r24, 0x20	; 32
+    28b4:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
+    28b8:	90 93 c2 0d 	sts	0x0DC2, r25	; 0x800dc2 <bufferBluetoothReceiveUART1+0x1>
+    28bc:	80 93 c1 0d 	sts	0x0DC1, r24	; 0x800dc1 <bufferBluetoothReceiveUART1>
 	globalError					= xQueueCreate(  1, sizeof( uint8_t ) );
-    28b4:	40 e0       	ldi	r20, 0x00	; 0
-    28b6:	61 e0       	ldi	r22, 0x01	; 1
-    28b8:	81 e0       	ldi	r24, 0x01	; 1
-    28ba:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
-    28be:	90 93 c0 0d 	sts	0x0DC0, r25	; 0x800dc0 <globalError+0x1>
-    28c2:	80 93 bf 0d 	sts	0x0DBF, r24	; 0x800dbf <globalError>
+    28c0:	40 e0       	ldi	r20, 0x00	; 0
+    28c2:	61 e0       	ldi	r22, 0x01	; 1
+    28c4:	81 e0       	ldi	r24, 0x01	; 1
+    28c6:	0e 94 61 07 	call	0xec2	; 0xec2 <xQueueGenericCreate>
+    28ca:	90 93 c0 0d 	sts	0x0DC0, r25	; 0x800dc0 <globalError+0x1>
+    28ce:	80 93 bf 0d 	sts	0x0DBF, r24	; 0x800dbf <globalError>
 
 	/* Create the tasks. */
 	xTaskCreate( vPeriodicTask,                  "Periodic", configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY,    NULL );
-    28c6:	e1 2c       	mov	r14, r1
-    28c8:	f1 2c       	mov	r15, r1
-    28ca:	02 e0       	ldi	r16, 0x02	; 2
-    28cc:	20 e0       	ldi	r18, 0x00	; 0
-    28ce:	30 e0       	ldi	r19, 0x00	; 0
-    28d0:	45 e5       	ldi	r20, 0x55	; 85
-    28d2:	50 e0       	ldi	r21, 0x00	; 0
-    28d4:	65 e0       	ldi	r22, 0x05	; 5
-    28d6:	71 e0       	ldi	r23, 0x01	; 1
-    28d8:	8c ef       	ldi	r24, 0xFC	; 252
-    28da:	93 e1       	ldi	r25, 0x13	; 19
-    28dc:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
+    28d2:	e1 2c       	mov	r14, r1
+    28d4:	f1 2c       	mov	r15, r1
+    28d6:	02 e0       	ldi	r16, 0x02	; 2
+    28d8:	20 e0       	ldi	r18, 0x00	; 0
+    28da:	30 e0       	ldi	r19, 0x00	; 0
+    28dc:	45 e5       	ldi	r20, 0x55	; 85
+    28de:	50 e0       	ldi	r21, 0x00	; 0
+    28e0:	65 e0       	ldi	r22, 0x05	; 5
+    28e2:	71 e0       	ldi	r23, 0x01	; 1
+    28e4:	8c ef       	ldi	r24, 0xFC	; 252
+    28e6:	93 e1       	ldi	r25, 0x13	; 19
+    28e8:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
 	xTaskCreate( vBluetoothReceiveCommandUART1,	 "BTcmd",    configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY, NULL );
-    28e0:	20 e0       	ldi	r18, 0x00	; 0
-    28e2:	30 e0       	ldi	r19, 0x00	; 0
-    28e4:	45 e5       	ldi	r20, 0x55	; 85
-    28e6:	50 e0       	ldi	r21, 0x00	; 0
-    28e8:	6e e0       	ldi	r22, 0x0E	; 14
-    28ea:	71 e0       	ldi	r23, 0x01	; 1
-    28ec:	88 ec       	ldi	r24, 0xC8	; 200
-    28ee:	93 e1       	ldi	r25, 0x13	; 19
-    28f0:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
+    28ec:	20 e0       	ldi	r18, 0x00	; 0
+    28ee:	30 e0       	ldi	r19, 0x00	; 0
+    28f0:	45 e5       	ldi	r20, 0x55	; 85
+    28f2:	50 e0       	ldi	r21, 0x00	; 0
+    28f4:	6e e0       	ldi	r22, 0x0E	; 14
+    28f6:	71 e0       	ldi	r23, 0x01	; 1
+    28f8:	88 ec       	ldi	r24, 0xC8	; 200
+    28fa:	93 e1       	ldi	r25, 0x13	; 19
+    28fc:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
 	xTaskCreate( vRoombaTransmitServiceUART0,    "UART0Tx",  configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY,   NULL );
-    28f4:	20 e0       	ldi	r18, 0x00	; 0
-    28f6:	30 e0       	ldi	r19, 0x00	; 0
-    28f8:	45 e5       	ldi	r20, 0x55	; 85
-    28fa:	50 e0       	ldi	r21, 0x00	; 0
-    28fc:	64 e1       	ldi	r22, 0x14	; 20
-    28fe:	71 e0       	ldi	r23, 0x01	; 1
-    2900:	8b ed       	ldi	r24, 0xDB	; 219
-    2902:	92 e1       	ldi	r25, 0x12	; 18
-    2904:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
+    2900:	20 e0       	ldi	r18, 0x00	; 0
+    2902:	30 e0       	ldi	r19, 0x00	; 0
+    2904:	45 e5       	ldi	r20, 0x55	; 85
+    2906:	50 e0       	ldi	r21, 0x00	; 0
+    2908:	64 e1       	ldi	r22, 0x14	; 20
+    290a:	71 e0       	ldi	r23, 0x01	; 1
+    290c:	8b ed       	ldi	r24, 0xDB	; 219
+    290e:	92 e1       	ldi	r25, 0x12	; 18
+    2910:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
 	xTaskCreate( vBluetoothTransmitServiceUART1, "UART1Tx",  configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY,   NULL );
-    2908:	20 e0       	ldi	r18, 0x00	; 0
-    290a:	30 e0       	ldi	r19, 0x00	; 0
-    290c:	45 e5       	ldi	r20, 0x55	; 85
-    290e:	50 e0       	ldi	r21, 0x00	; 0
-    2910:	6c e1       	ldi	r22, 0x1C	; 28
-    2912:	71 e0       	ldi	r23, 0x01	; 1
-    2914:	8b ec       	ldi	r24, 0xCB	; 203
-    2916:	92 e1       	ldi	r25, 0x12	; 18
-    2918:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
+    2914:	20 e0       	ldi	r18, 0x00	; 0
+    2916:	30 e0       	ldi	r19, 0x00	; 0
+    2918:	45 e5       	ldi	r20, 0x55	; 85
+    291a:	50 e0       	ldi	r21, 0x00	; 0
+    291c:	6c e1       	ldi	r22, 0x1C	; 28
+    291e:	71 e0       	ldi	r23, 0x01	; 1
+    2920:	8b ec       	ldi	r24, 0xCB	; 203
+    2922:	92 e1       	ldi	r25, 0x12	; 18
+    2924:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
 	xTaskCreate( vErrorHandler,                  "Error",    configMINIMAL_STACK_SIZE, NULL, mainNORMAL_PRIORITY,  NULL );
-    291c:	20 e0       	ldi	r18, 0x00	; 0
-    291e:	30 e0       	ldi	r19, 0x00	; 0
-    2920:	45 e5       	ldi	r20, 0x55	; 85
-    2922:	50 e0       	ldi	r21, 0x00	; 0
-    2924:	64 e2       	ldi	r22, 0x24	; 36
-    2926:	71 e0       	ldi	r23, 0x01	; 1
-    2928:	8a ec       	ldi	r24, 0xCA	; 202
-    292a:	92 e1       	ldi	r25, 0x12	; 18
-    292c:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
+    2928:	20 e0       	ldi	r18, 0x00	; 0
+    292a:	30 e0       	ldi	r19, 0x00	; 0
+    292c:	45 e5       	ldi	r20, 0x55	; 85
+    292e:	50 e0       	ldi	r21, 0x00	; 0
+    2930:	64 e2       	ldi	r22, 0x24	; 36
+    2932:	71 e0       	ldi	r23, 0x01	; 1
+    2934:	8a ec       	ldi	r24, 0xCA	; 202
+    2936:	92 e1       	ldi	r25, 0x12	; 18
+    2938:	0e 94 2a 0c 	call	0x1854	; 0x1854 <xTaskCreate>
 
 	vTaskStartScheduler( );
-    2930:	0e 94 7e 0c 	call	0x18fc	; 0x18fc <vTaskStartScheduler>
+    293c:	0e 94 7e 0c 	call	0x18fc	; 0x18fc <vTaskStartScheduler>
 
 	return 0;
 }
-    2934:	80 e0       	ldi	r24, 0x00	; 0
-    2936:	90 e0       	ldi	r25, 0x00	; 0
-    2938:	0f 91       	pop	r16
-    293a:	ff 90       	pop	r15
-    293c:	ef 90       	pop	r14
-    293e:	08 95       	ret
+    2940:	80 e0       	ldi	r24, 0x00	; 0
+    2942:	90 e0       	ldi	r25, 0x00	; 0
+    2944:	0f 91       	pop	r16
+    2946:	ff 90       	pop	r15
+    2948:	ef 90       	pop	r14
+    294a:	08 95       	ret
 
-00002940 <vApplicationIdleHook>:
+0000294c <vApplicationIdleHook>:
 
 	}
 }
 
 
 void vApplicationIdleHook( void ) {
-    2940:	08 95       	ret
+    294c:	08 95       	ret
 
-00002942 <__vector_18>:
+0000294e <__vector_18>:
 /*************************************************************/
 /*                INTERRUPT SERVICE ROUTINES                 */
 /*************************************************************/
 
 
 ISR( USART0_RX_vect ) {
-    2942:	1f 92       	push	r1
-    2944:	0f 92       	push	r0
-    2946:	0f b6       	in	r0, 0x3f	; 63
-    2948:	0f 92       	push	r0
-    294a:	11 24       	eor	r1, r1
-    294c:	2f 93       	push	r18
-    294e:	3f 93       	push	r19
-    2950:	4f 93       	push	r20
-    2952:	5f 93       	push	r21
-    2954:	6f 93       	push	r22
-    2956:	7f 93       	push	r23
-    2958:	8f 93       	push	r24
-    295a:	9f 93       	push	r25
-    295c:	af 93       	push	r26
-    295e:	bf 93       	push	r27
-    2960:	ef 93       	push	r30
-    2962:	ff 93       	push	r31
+    294e:	1f 92       	push	r1
+    2950:	0f 92       	push	r0
+    2952:	0f b6       	in	r0, 0x3f	; 63
+    2954:	0f 92       	push	r0
+    2956:	11 24       	eor	r1, r1
+    2958:	2f 93       	push	r18
+    295a:	3f 93       	push	r19
+    295c:	4f 93       	push	r20
+    295e:	5f 93       	push	r21
+    2960:	6f 93       	push	r22
+    2962:	7f 93       	push	r23
+    2964:	8f 93       	push	r24
+    2966:	9f 93       	push	r25
+    2968:	af 93       	push	r26
+    296a:	bf 93       	push	r27
+    296c:	ef 93       	push	r30
+    296e:	ff 93       	push	r31
 	/* UART0 receive complete ISR. 
 	   Pushes received byte from UDR0 register on bufferRoombaReceiveUART0 queue. */
 	xQueueSendToBackFromISR( bufferRoombaReceiveUART0, &UDR0, NULL );
-    2964:	20 e0       	ldi	r18, 0x00	; 0
-    2966:	40 e0       	ldi	r20, 0x00	; 0
-    2968:	50 e0       	ldi	r21, 0x00	; 0
-    296a:	6c e2       	ldi	r22, 0x2C	; 44
-    296c:	70 e0       	ldi	r23, 0x00	; 0
-    296e:	80 91 e5 0d 	lds	r24, 0x0DE5	; 0x800de5 <bufferRoombaReceiveUART0>
-    2972:	90 91 e6 0d 	lds	r25, 0x0DE6	; 0x800de6 <bufferRoombaReceiveUART0+0x1>
-    2976:	0e 94 3b 08 	call	0x1076	; 0x1076 <xQueueGenericSendFromISR>
+    2970:	20 e0       	ldi	r18, 0x00	; 0
+    2972:	40 e0       	ldi	r20, 0x00	; 0
+    2974:	50 e0       	ldi	r21, 0x00	; 0
+    2976:	6c e2       	ldi	r22, 0x2C	; 44
+    2978:	70 e0       	ldi	r23, 0x00	; 0
+    297a:	80 91 e5 0d 	lds	r24, 0x0DE5	; 0x800de5 <bufferRoombaReceiveUART0>
+    297e:	90 91 e6 0d 	lds	r25, 0x0DE6	; 0x800de6 <bufferRoombaReceiveUART0+0x1>
+    2982:	0e 94 3b 08 	call	0x1076	; 0x1076 <xQueueGenericSendFromISR>
 }
-    297a:	ff 91       	pop	r31
-    297c:	ef 91       	pop	r30
-    297e:	bf 91       	pop	r27
-    2980:	af 91       	pop	r26
-    2982:	9f 91       	pop	r25
-    2984:	8f 91       	pop	r24
-    2986:	7f 91       	pop	r23
-    2988:	6f 91       	pop	r22
-    298a:	5f 91       	pop	r21
-    298c:	4f 91       	pop	r20
-    298e:	3f 91       	pop	r19
-    2990:	2f 91       	pop	r18
-    2992:	0f 90       	pop	r0
-    2994:	0f be       	out	0x3f, r0	; 63
-    2996:	0f 90       	pop	r0
-    2998:	1f 90       	pop	r1
-    299a:	18 95       	reti
+    2986:	ff 91       	pop	r31
+    2988:	ef 91       	pop	r30
+    298a:	bf 91       	pop	r27
+    298c:	af 91       	pop	r26
+    298e:	9f 91       	pop	r25
+    2990:	8f 91       	pop	r24
+    2992:	7f 91       	pop	r23
+    2994:	6f 91       	pop	r22
+    2996:	5f 91       	pop	r21
+    2998:	4f 91       	pop	r20
+    299a:	3f 91       	pop	r19
+    299c:	2f 91       	pop	r18
+    299e:	0f 90       	pop	r0
+    29a0:	0f be       	out	0x3f, r0	; 63
+    29a2:	0f 90       	pop	r0
+    29a4:	1f 90       	pop	r1
+    29a6:	18 95       	reti
 
-0000299c <__vector_30>:
+000029a8 <__vector_30>:
 
 ISR( USART1_RX_vect ) {
-    299c:	1f 92       	push	r1
-    299e:	0f 92       	push	r0
-    29a0:	0f b6       	in	r0, 0x3f	; 63
-    29a2:	0f 92       	push	r0
-    29a4:	11 24       	eor	r1, r1
-    29a6:	2f 93       	push	r18
-    29a8:	3f 93       	push	r19
-    29aa:	4f 93       	push	r20
-    29ac:	5f 93       	push	r21
-    29ae:	6f 93       	push	r22
-    29b0:	7f 93       	push	r23
-    29b2:	8f 93       	push	r24
-    29b4:	9f 93       	push	r25
-    29b6:	af 93       	push	r26
-    29b8:	bf 93       	push	r27
-    29ba:	ef 93       	push	r30
-    29bc:	ff 93       	push	r31
+    29a8:	1f 92       	push	r1
+    29aa:	0f 92       	push	r0
+    29ac:	0f b6       	in	r0, 0x3f	; 63
+    29ae:	0f 92       	push	r0
+    29b0:	11 24       	eor	r1, r1
+    29b2:	2f 93       	push	r18
+    29b4:	3f 93       	push	r19
+    29b6:	4f 93       	push	r20
+    29b8:	5f 93       	push	r21
+    29ba:	6f 93       	push	r22
+    29bc:	7f 93       	push	r23
+    29be:	8f 93       	push	r24
+    29c0:	9f 93       	push	r25
+    29c2:	af 93       	push	r26
+    29c4:	bf 93       	push	r27
+    29c6:	ef 93       	push	r30
+    29c8:	ff 93       	push	r31
 /* UART1 receive complete ISR. 
 	   Pushes received byte from UDR1 register on bufferBluetoothReceiveUART1 queue. */
 	xQueueSendToBackFromISR( bufferBluetoothReceiveUART1, &UDR1, NULL );
-    29be:	20 e0       	ldi	r18, 0x00	; 0
-    29c0:	40 e0       	ldi	r20, 0x00	; 0
-    29c2:	50 e0       	ldi	r21, 0x00	; 0
-    29c4:	6c e9       	ldi	r22, 0x9C	; 156
-    29c6:	70 e0       	ldi	r23, 0x00	; 0
-    29c8:	80 91 c1 0d 	lds	r24, 0x0DC1	; 0x800dc1 <bufferBluetoothReceiveUART1>
-    29cc:	90 91 c2 0d 	lds	r25, 0x0DC2	; 0x800dc2 <bufferBluetoothReceiveUART1+0x1>
-    29d0:	0e 94 3b 08 	call	0x1076	; 0x1076 <xQueueGenericSendFromISR>
+    29ca:	20 e0       	ldi	r18, 0x00	; 0
+    29cc:	40 e0       	ldi	r20, 0x00	; 0
+    29ce:	50 e0       	ldi	r21, 0x00	; 0
+    29d0:	6c e9       	ldi	r22, 0x9C	; 156
+    29d2:	70 e0       	ldi	r23, 0x00	; 0
+    29d4:	80 91 c1 0d 	lds	r24, 0x0DC1	; 0x800dc1 <bufferBluetoothReceiveUART1>
+    29d8:	90 91 c2 0d 	lds	r25, 0x0DC2	; 0x800dc2 <bufferBluetoothReceiveUART1+0x1>
+    29dc:	0e 94 3b 08 	call	0x1076	; 0x1076 <xQueueGenericSendFromISR>
 }
-    29d4:	ff 91       	pop	r31
-    29d6:	ef 91       	pop	r30
-    29d8:	bf 91       	pop	r27
-    29da:	af 91       	pop	r26
-    29dc:	9f 91       	pop	r25
-    29de:	8f 91       	pop	r24
-    29e0:	7f 91       	pop	r23
-    29e2:	6f 91       	pop	r22
-    29e4:	5f 91       	pop	r21
-    29e6:	4f 91       	pop	r20
-    29e8:	3f 91       	pop	r19
-    29ea:	2f 91       	pop	r18
-    29ec:	0f 90       	pop	r0
-    29ee:	0f be       	out	0x3f, r0	; 63
-    29f0:	0f 90       	pop	r0
-    29f2:	1f 90       	pop	r1
-    29f4:	18 95       	reti
+    29e0:	ff 91       	pop	r31
+    29e2:	ef 91       	pop	r30
+    29e4:	bf 91       	pop	r27
+    29e6:	af 91       	pop	r26
+    29e8:	9f 91       	pop	r25
+    29ea:	8f 91       	pop	r24
+    29ec:	7f 91       	pop	r23
+    29ee:	6f 91       	pop	r22
+    29f0:	5f 91       	pop	r21
+    29f2:	4f 91       	pop	r20
+    29f4:	3f 91       	pop	r19
+    29f6:	2f 91       	pop	r18
+    29f8:	0f 90       	pop	r0
+    29fa:	0f be       	out	0x3f, r0	; 63
+    29fc:	0f 90       	pop	r0
+    29fe:	1f 90       	pop	r1
+    2a00:	18 95       	reti
 
-000029f6 <__tablejump2__>:
-    29f6:	ee 0f       	add	r30, r30
-    29f8:	ff 1f       	adc	r31, r31
-    29fa:	05 90       	lpm	r0, Z+
-    29fc:	f4 91       	lpm	r31, Z
-    29fe:	e0 2d       	mov	r30, r0
-    2a00:	09 94       	ijmp
+00002a02 <__tablejump2__>:
+    2a02:	ee 0f       	add	r30, r30
+    2a04:	ff 1f       	adc	r31, r31
+    2a06:	05 90       	lpm	r0, Z+
+    2a08:	f4 91       	lpm	r31, Z
+    2a0a:	e0 2d       	mov	r30, r0
+    2a0c:	09 94       	ijmp
 
-00002a02 <memcpy>:
-    2a02:	fb 01       	movw	r30, r22
-    2a04:	dc 01       	movw	r26, r24
-    2a06:	02 c0       	rjmp	.+4      	; 0x2a0c <memcpy+0xa>
-    2a08:	01 90       	ld	r0, Z+
-    2a0a:	0d 92       	st	X+, r0
-    2a0c:	41 50       	subi	r20, 0x01	; 1
-    2a0e:	50 40       	sbci	r21, 0x00	; 0
-    2a10:	d8 f7       	brcc	.-10     	; 0x2a08 <memcpy+0x6>
-    2a12:	08 95       	ret
+00002a0e <memcpy>:
+    2a0e:	fb 01       	movw	r30, r22
+    2a10:	dc 01       	movw	r26, r24
+    2a12:	02 c0       	rjmp	.+4      	; 0x2a18 <memcpy+0xa>
+    2a14:	01 90       	ld	r0, Z+
+    2a16:	0d 92       	st	X+, r0
+    2a18:	41 50       	subi	r20, 0x01	; 1
+    2a1a:	50 40       	sbci	r21, 0x00	; 0
+    2a1c:	d8 f7       	brcc	.-10     	; 0x2a14 <memcpy+0x6>
+    2a1e:	08 95       	ret
 
-00002a14 <_exit>:
-    2a14:	f8 94       	cli
+00002a20 <_exit>:
+    2a20:	f8 94       	cli
 
-00002a16 <__stop_program>:
-    2a16:	ff cf       	rjmp	.-2      	; 0x2a16 <__stop_program>
+00002a22 <__stop_program>:
+    2a22:	ff cf       	rjmp	.-2      	; 0x2a22 <__stop_program>

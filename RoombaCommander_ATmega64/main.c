@@ -47,6 +47,8 @@
 #define ERROR_BT_RECEIVE			( uint8_t ) 6		/* Function getByteFromBT() failed */
 #define ERROR_DATA					( uint8_t ) 7		/* Unexpected data */
 
+#define ADC_CHANNELS_USED			( uint8_t ) 1
+
 
 
 /*************************************************************/
@@ -162,46 +164,55 @@ static void vPeriodicTask( void *pvParameters ) {
 	/* The parameters are not used. */
 	( void ) pvParameters;
 
-	uint8_t analogSensor = 0;
-	uint8_t sensoresUsed = 1;
+	/* Setup ADC registers. */
 
-	/* Enable ADC and set prescaler. */
-	ADCSRA = ( 1 << ADEN ) | ( 1 << ADPS2 ) | ( 1 << ADPS1 ) | ( 1 << ADPS0 );
+	/* ADCSRA – ADC	Control and Status Register A
+	    Bit 7    – ADEN: ADC Enable
+		          **ADC Enabled**
+		Bit 6    – ADSC: ADC Start Conversion
+		Bit 5    – ADATE: ADC Auto Trigger Enable
+		Bit 4    – ADIF: ADC Interrupt Flag
+		Bit 3    – ADIE: ADC Interrupt Enable
+		Bits 2:0 – ADPS2:0: ADC Prescaler Select Bits
+	              **Selected division factor 16 (ADPS2:0 - 100), that is sufficient for 8 bit resolution**
+	*/
+	ADCSRA = ( 1 << ADEN ) | ( 1 << ADPS2 ) | ( 0 << ADPS1 ) | ( 0 << ADPS0 );
 
-	/* Set ADC voltage ref. selection and left adjust result. */
+	/* ADMUX – ADC Multiplexer Selection Register
+	     Bit 7:6  – REFS1:0: Reference Selection Bits
+		           **Selected AVCC with external capacitor at AREF pin. (REFS1:0 - 01)**
+	     Bit 5    – ADLAR: ADC Left Adjust Result
+		           **Enabled: result is formated so that high byte contains 8 bits of data and low remaining 2 bits.
+				    Only high byte is used (8 bit resolution), low byte is discarded.
+		 Bits 4:0 – MUX4:0: Analog Channel and Gain Selection Bits
+	*/
 	ADMUX = ( 1 << REFS0 ) | ( 1 << ADLAR );
-	
+
 	for( ;; ) {
 
-		PORTB ^= (1 << PB0);
+		/* Poll ADC channels and store data in sensorDataMCU[ ]. */
+		for( uint8_t activeSensor = 0; activeSensor < ADC_CHANNELS_USED; ++activeSensor ) {
 
-		/* Write sensor data. */
-		sensorDataMCU[ analogSensor ] = ADCH;
+			/* Clear MUX4:0 (ADC channel selection bits). */
+			ADMUX &= 0xF0;
 
-		/* TEST */
-		sendByteToBT( sensorDataMCU[0] );
+			/* Set MUX4:0 bits with new sensor. */
+			ADMUX |= activeSensor;
 		
-		/* Clear MUX4:0 bits. */
-		ADMUX |= 0xF0;
+			/* Start ADC in single conversion mode. */
+			ADCSRA |= ( 1 << ADSC );
 
-		/* Set MUX4:0 bits with new sensor. */
-		ADMUX |= analogSensor;
+			/* Wait for AD conversion to complete.
+			   TODO: Implement interrupt driven ADC. */
+			while( ( ADCSRA & ( 1 << ADSC ) ) != 0 );
 		
-		/* Start ADC in single conversion mode. */
-		ADCSRA |= ( 1 << ADSC );
+			/* Write sensor data in 8 bit resolution. */
+			sensorDataMCU[ activeSensor ] = ADCH;
 
-		//if( analogSensor >= sensoresUsed ) {
-			//analogSensor = 0;
-		//}
-
-		/* Wait for AD conversion to complete.
-		   TODO: Implement interrupt driven ADC. */
-		//while( ADSC );
-
-		
+		}		
 
 		/* Periodic delay. */
-		vTaskDelay( pdMS_TO_TICKS( 2000 ) );
+		vTaskDelay( pdMS_TO_TICKS( 500 ) );
 	}
 }
 
