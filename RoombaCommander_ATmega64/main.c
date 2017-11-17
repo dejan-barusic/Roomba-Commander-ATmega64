@@ -49,6 +49,9 @@
 
 #define ADC_CHANNELS_USED			( uint8_t ) 1
 
+#define MCU_DATA_OPCODE				( uint8_t ) 240
+#define MCU_DATA_BYTES				( uint8_t ) 8
+
 
 
 /*************************************************************/
@@ -76,6 +79,7 @@ static    void flushQueue						( QueueHandle_t queue );
 static    void handlerRoombaSCIStandard			( uint8_t opcode, uint8_t numberOfDataBytes );
 static    void handlerRoombaSCISensors			( uint8_t opcode );
 static    void handlerRoombaSCISong				( uint8_t opcode );
+static    void handlerGetMCUData				( void );
 
 
 
@@ -212,7 +216,7 @@ static void vPeriodicTask( void *pvParameters ) {
 		}		
 
 		/* Periodic delay. */
-		vTaskDelay( pdMS_TO_TICKS( 500 ) );
+		vTaskDelay( pdMS_TO_TICKS( 100 ) );
 	}
 }
 
@@ -299,6 +303,11 @@ static void vBluetoothReceiveCommandUART1( void *pvParameters ) {
 			  [Opcode] [Song Number] [Song Length] [Note Number 1] [Note Duration 1] [Note Number 2] [Note Duration 2] etc. */
 			case SCI_SONG_OPCODE:
 				handlerRoombaSCISong( opcode );
+				break;
+
+			/* Send data from sensors on MCU pins. */
+			case MCU_DATA_OPCODE:
+				handlerGetMCUData( );
 				break;
 
 			default:
@@ -478,5 +487,13 @@ static void handlerRoombaSCISong( uint8_t opcode ) {
 	/* Send notes to Roomba. */
 	for( uint8_t i = 0; i < length; ++i ) {
 		sendByteToRoomba( getByteFromBT( ) );
+	}
+}
+
+static void handlerGetMCUData( void ) {
+
+	/* Send data bytes from MCU to BT. */
+	for( uint8_t i = 0; i < MCU_DATA_BYTES; ++i ) {
+		sendByteToBT( sensorDataMCU[ i ] );
 	}
 }
